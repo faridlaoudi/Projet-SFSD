@@ -74,6 +74,7 @@ void readFromFile(const char* filename) {
     }
 
     champ champ;
+    printf("The Data of %s :\n",filename);
     while (fread(&champ, sizeof(champ), 1, file)) {
         if (champ.type == INT) {
             printf("Your ID: %d\n", champ.value.intValue);
