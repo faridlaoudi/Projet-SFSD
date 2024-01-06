@@ -120,7 +120,7 @@ int main() {
                 break;
             case 3:
                 //search with index and delete
-                printf("Enter index of structure to delete: ");
+                printf("Enter number of structure to delete: ");
                 scanf("%d", &deleteIndex);
                 if (deleteIndex >= 0 && deleteIndex < engCount) {
                     deleteStruct(&engTableau, &engCount, deleteIndex);
