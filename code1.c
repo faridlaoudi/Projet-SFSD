@@ -85,7 +85,7 @@ void addStruct(eng **engTableau, int *engCount, int nbchamp) {
 
     (*engCount)++;
 }
-<<<<<<< HEAD
+
 void deleteStruct(eng **engTableau, int *engCount, int index) {
     free((*engTableau)[index].champs);
 
@@ -96,8 +96,7 @@ void deleteStruct(eng **engTableau, int *engCount, int index) {
     *engTableau = realloc(*engTableau, (*engCount - 1) * sizeof(eng));
     (*engCount)--;
 }
-=======
->>>>>>> main
+
 
 int main() {
     int engCount = 0, nbchamp, choice, deleteIndex, searchIndex, searchValue;
