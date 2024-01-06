@@ -1,6 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
+
+int hasExtension(const char *fileName, const char *extension) {
+    const char *dot = strrchr(fileName, '.');
+    if (!dot || dot == fileName) return 0;
+    return strcmp(dot, extension) == 0;
+}
+
+void listFiles(const char *path, const char *extension) {
+    struct dirent *entry;
+    DIR *dir = opendir(path);
+
+    if (dir == NULL) {
+        perror("Error opening directory");
+        return;
+    }
+
+    printf("avialable files :\n");
+    while ((entry = readdir(dir)) != NULL) {
+        if (hasExtension(entry->d_name, extension)) {
+            printf("%s\n", entry->d_name);
+        }
+    }
+
+    closedir(dir);
+}
 
 typedef enum {
     INT,
@@ -98,12 +124,13 @@ void deleteStruct(eng **engTableau, int *engCount, int index) {
 }
 
 int main() {
-    int engCount = 0, nbchamp = 0, deleteIndex, choice1, choice2;
+    int engCount = 0, nbchamp = 0, deleteIndex, choice1, choice2, chfile;
     eng *engTableau = NULL;
     char filename[50];
     int fileOpened = 0;  //check if a file is opened
-
-    do {
+    do{
+        do {
+        chfile=0;
         printf("\nMenu:\n");
         printf("1. Open an existing file\n");
         printf("2. Create a new file\n");
@@ -116,9 +143,9 @@ int main() {
                 if (fileOpened) {
                     printf("A file is already open. Please close it first.\n");
                 } else {
-                    printf("Enter the name of the file to open: ");
+                    printf("Enter the name of the file to open: \n");
+                    listFiles(".", ".txt");
                     scanf("%s", filename);
-                    readFromFile(filename);
                     fileOpened = 1;
                 }
                 break;
@@ -127,7 +154,7 @@ int main() {
                 if (fileOpened) {
                     printf("A file is already open. Please close it first.\n");
                 } else {
-                    printf("Enter the name for new file: ");
+                    printf("Enter the name for new file (add .txt): ");
                     scanf("%s", filename);
                     FILE *file = fopen(filename, "w+"); // Create an empty file
                     if (file == NULL) {
@@ -148,9 +175,9 @@ int main() {
             default:
                 printf("Invalid choice. Please try again.\n");
         }
-    }while(!fileOpened);
-    do {
-        printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Exit\n",filename);
+        }while(!fileOpened);
+        do {
+        printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Change the current file\n6. Exit\n",filename);
         printf("entre you choice :");
         scanf("%d", &choice2);
 
@@ -193,15 +220,19 @@ int main() {
                 break;
             case 5:
                 //change file
-            
+                FILE *file = fopen(filename, "a+");
+                fclose(file);
+                fileOpened=0;
+                chfile=1;
                 break;
             case 6:
                 printf("Good bye\n");
                 break;
             default:
                 printf("Invalid choice. Please try again.\n");
-        }
-    }while (choice2 != 6);
+            }
+        }while (choice2 != 6 && choice2 !=5);
+    }while(chfile==1 && choice2 != 6 && choice1 != 3);
 
     // Free memory and clean up
     for (int i = 0; i < engCount; i++) {
