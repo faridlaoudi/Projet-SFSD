@@ -135,7 +135,8 @@ int main() {
         printf("\nMenu:\n");
         printf("1. Open an existing file\n");
         printf("2. Create a new file\n");
-        printf("3. Exit\n");
+        printf("3. Delete file\n");
+        printf("4. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice1);
 
@@ -169,7 +170,16 @@ int main() {
                     fileOpened = 1;
                 }
                 break;
-            case 3: // Exit
+
+            case 3: // delete file
+                printf("Enter the name of the file to delete: \n");
+                    listFiles(".", ".txt");
+                    scanf("%s", filename);
+                    remove(filename);
+                    fileOpened = 0;
+                break;
+
+            case 4: // Exit
                 printf("Exiting...\n");
                 break;
 
@@ -233,7 +243,7 @@ int main() {
                 printf("Invalid choice. Please try again.\n");
             }
         }while (choice2 != 6 && choice2 !=5);
-    }while(chfile==1 && choice2 != 6 && choice1 != 3);
+    }while(chfile==1 && choice2 != 6 && choice1 != 4);
 
     // Free memory and clean up
     for (int i = 0; i < engCount; i++) {
