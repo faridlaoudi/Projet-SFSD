@@ -25,7 +25,7 @@ typedef struct {
 } eng;
 
 void writeFichier(eng *engTableau, int engCount, int nbchamp, const char* filename) {
-    FILE *file = fopen(filename, "w+");
+    FILE *file = fopen(filename, "a+");
     if (!file) {
         perror("Error opening file");
         return;
@@ -41,7 +41,7 @@ void writeFichier(eng *engTableau, int engCount, int nbchamp, const char* filena
 }
 
 void readFromFile(const char* filename) {
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r+");
     if (!file) {
         perror("Error opening file");
         return;
@@ -52,7 +52,7 @@ void readFromFile(const char* filename) {
         if (champ.type == INT) {
             printf("Your ID: %d\n", champ.value.intValue);
         } else if (champ.type == FLOAT) {
-            printf("float is : %f\n", champ.value.floatValue);
+            printf("Your result is : %f\n", champ.value.floatValue);
         } else if (champ.type == STRING) {
             printf("Your name is : %s\n", champ.value.stringValue);
         }
@@ -67,15 +67,15 @@ void addStruct(eng **engTableau, int *engCount, int nbchamp) {
     (*engTableau)[*engCount].nbchamp = nbchamp;
 
     for (int j = 0; j < nbchamp; j++) {
-        printf("Structure %d, champ %d\n", *engCount + 1, j + 1);
-        printf("Enter champ type (0 for ID, 1 for la note, 2 for name): ");
+        printf("enregistrement %d, champ %d\n", *engCount + 1, j + 1);
+        printf("Enter champ type (0 for ID, 1 for Result, 2 for name): ");
         scanf("%d", (int *)&((*engTableau)[*engCount].champs[j].type));
 
         if ((*engTableau)[*engCount].champs[j].type == INT) {
             printf("Enter your id: ");
             scanf("%d", &((*engTableau)[*engCount].champs[j].value.intValue));
         } else if ((*engTableau)[*engCount].champs[j].type == FLOAT) {
-            printf("Enter the note num: ");
+            printf("Enter Your resut: ");
             scanf("%f", &((*engTableau)[*engCount].champs[j].value.floatValue));
         } else if ((*engTableau)[*engCount].champs[j].type == STRING) {
             printf("Enter your name: ");
@@ -97,51 +97,113 @@ void deleteStruct(eng **engTableau, int *engCount, int index) {
     (*engCount)--;
 }
 
-
 int main() {
-    int engCount = 0, nbchamp, choice, deleteIndex, searchIndex, searchValue;
+    int engCount = 0, nbchamp = 0, deleteIndex, choice1, choice2;
     eng *engTableau = NULL;
-
-    printf("Enter nombre des champs en enregistrement :");
-    scanf("%d", &nbchamp);
+    char filename[50];
+    int fileOpened = 0;  //check if a file is opened
 
     do {
-        printf("\n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Exit\n");
-        printf("entre you choice :");
-        scanf("%d", &choice);
+        printf("\nMenu:\n");
+        printf("1. Open an existing file\n");
+        printf("2. Create a new file\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice1);
 
-        switch (choice) {
-            case 1:
-                //function insertion
-                addStruct(&engTableau, &engCount, nbchamp);
-                writeFichier(engTableau, engCount, nbchamp, "donner.txt");
-                break;
-            case 2:
-                //read ml file after stocker
-                readFromFile("donner.txt");
-                break;
-            case 3:
-                //search with index and delete
-                printf("Enter number of structure to delete: ");
-                scanf("%d", &deleteIndex);
-                if (deleteIndex >= 0 && deleteIndex < engCount) {
-                    deleteStruct(&engTableau, &engCount, deleteIndex);
-                    writeFichier(engTableau, engCount, nbchamp, "donner.txt");
+        switch (choice1) {
+            case 1: // Open existing file
+                if (fileOpened) {
+                    printf("A file is already open. Please close it first.\n");
                 } else {
-                    printf("Invalid index\n");
+                    printf("Enter the name of the file to open: ");
+                    scanf("%s", filename);
+                    readFromFile(filename);
+                    fileOpened = 1;
                 }
                 break;
+
+            case 2: // Create new file
+                if (fileOpened) {
+                    printf("A file is already open. Please close it first.\n");
+                } else {
+                    printf("Enter the name for new file: ");
+                    scanf("%s", filename);
+                    FILE *file = fopen(filename, "w+"); // Create an empty file
+                    if (file == NULL) {
+                        perror("Error creating file");
+                    } else {
+                        fclose(file);
+                        printf("New file created.\n");
+                    }
+                    printf("Enter the number of fields in a record: ");
+                    scanf("%d", &nbchamp);
+                    fileOpened = 1;
+                }
+                break;
+            case 3: // Exit
+                printf("Exiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }while(!fileOpened);
+    do {
+        printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Exit\n",filename);
+        printf("entre you choice :");
+        scanf("%d", &choice2);
+
+        switch (choice2) {
+            case 1: // Insert new record
+                if (!fileOpened) {
+                    printf("No file is open. Please open or create a file first.\n");
+                } else {
+                    addStruct(&engTableau, &engCount, nbchamp);
+                    writeFichier(engTableau, engCount, nbchamp, filename);
+                }
+                break;
+
+            case 2: // View Data
+                if (!fileOpened) {
+                    printf("No file is open. Please open or create a file first.\n");
+                } else {
+                    readFromFile(filename);
+                }
+                break;
+
+            case 3: // Delete a record
+                if (!fileOpened) {
+                    printf("No file is open. Please open or create a file first.\n");
+                } else {
+                     printf("Enter number of structure to delete: ");
+                    scanf("%d", &deleteIndex);
+                    if (deleteIndex >= 0 && deleteIndex < engCount) {
+                    deleteStruct(&engTableau, &engCount, deleteIndex);
+                    writeFichier(engTableau, engCount, nbchamp, filename);
+                    } else {
+                    printf("Invalid index\n");
+                    }
+                }
+                break;
+
             case 4:
                 //search with index or wiht our values
+            
                 break;
             case 5:
+                //change file
+            
+                break;
+            case 6:
                 printf("Good bye\n");
                 break;
             default:
-                printf("invalid choice choose another one :\n");
+                printf("Invalid choice. Please try again.\n");
         }
-    } while (choice != 5);
+    }while (choice2 != 6);
 
+    // Free memory and clean up
     for (int i = 0; i < engCount; i++) {
         free(engTableau[i].champs);
     }
