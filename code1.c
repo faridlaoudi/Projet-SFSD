@@ -125,27 +125,54 @@ void deleteStruct(eng **engTableau, int *engCount, int index) {
 }
 // ill add the search function , sensitive to case but ig we will need to make the entery of infos case sensitive as well//
 //this function will search for l'enregistrement that contains the key of the specific value and shows it//
-void search(eng *engTableau, int engCount, champType keyType, void *searchValue) {
+void search(eng *engTableau, int engCount, int nbchamp) {
     int found = 0;  // Flag to check if we found a match
+    char keyStringValue[50];
+    int keyIntValue;
+    float keyFloatValue;
+    champType keyType;
+    // Ask the user for the type of the key so we will need to make is "configurable"
+    //possible keys type
+    printf("Enter key type (0 for INT, 1 for FLOAT, 2 for STRING): ");
+    scanf("%d", (int *)&keyType);
 
+    // Get the key value from the user
+    if (keyType == INT) {
+        printf("Enter the integer key value: ");
+        scanf("%d", &keyIntValue);
+    } else if (keyType == FLOAT) {
+        printf("Enter the float key value: ");
+        scanf("%f", &keyFloatValue);
+    } else if (keyType == STRING) {
+        printf("Enter the string key value: ");
+        scanf("%49s", keyStringValue);
+    } else {
+        printf("Invalid key type.\n");
+        return;
+    }
+
+    // boucler tous les enregistrements de fichier
     for (int i = 0; i < engCount; i++) {
-        for (int j = 0; j < engTableau[i].nbchamp; j++) {
+        for (int j = 0; j < nbchamp; j++) {
             if (engTableau[i].champs[j].type == keyType) {
-                // Compare based on type
-                if ((keyType == INT && engTableau[i].champs[j].value.intValue == *(int*)searchValue) ||
-                    (keyType == FLOAT && engTableau[i].champs[j].value.floatValue == *(float*)searchValue) ||
-                    (keyType == STRING && strcmp(engTableau[i].champs[j].value.stringValue, (char*)searchValue) == 0)) {
+                if ((keyType == INT && engTableau[i].champs[j].value.intValue == keyIntValue) ||
+                    (keyType == FLOAT && engTableau[i].champs[j].value.floatValue == keyFloatValue) ||
+                    (keyType == STRING && strcmp(engTableau[i].champs[j].value.stringValue, keyStringValue) == 0)) {
                     // Found a match
                     found = 1;
                     printf("Match found in record %d, field %d\n", i + 1, j + 1);
 
-                    // Display the value
-                    if (keyType == INT) {
-                        printf("Value: %d\n", engTableau[i].champs[j].value.intValue);
-                    } else if (keyType == FLOAT) {
-                        printf("Value: %f\n", engTableau[i].champs[j].value.floatValue);
-                    } else if (keyType == STRING) {
-                        printf("Value: %s\n", engTableau[i].champs[j].value.stringValue);
+                    // Display the other values in the same record for context
+                    for (int k = 0; k < nbchamp; k++) {
+                        if (k != j) {  // Skip the key field itself logiquement
+                            if (engTableau[i].champs[k].type == INT) {
+                                printf("Other value: %d\n", engTableau[i].champs[k].value.intValue);
+                            } else if (engTableau[i].champs[k].type == FLOAT) {
+                                printf("Other value: %f\n", engTableau[i].champs[k].value.floatValue);
+                            } else if (engTableau[i].champs[k].type == STRING) {
+                                printf("Other value: %s\n", engTableau[i].champs[k].value.stringValue);
+                            }
+                        }
                     }
                 }
             }
