@@ -2,7 +2,7 @@
 #define TOVC.h
 //taille maximal du bloc 
 #define MAX_taille 512
-#define MAX_chauv
+#define MAX_chauv 10
 #define SEP_ENR'|' // Séparateur denregistrements
 #define SEP_CHAMP '$' // Séparateur des champs
 #define TAILLE_CLE 10
@@ -53,3 +53,5 @@ void writeDir(TOVC *Pointeur, int i, BUFFER buff);     //pour l'écriture d'un b
 //allocation
 int allocBloc(TOVC *Pointeur);  
 void AfficheTout(TOVC* fichier);
+//i added this 
+TOVC *facteur(char *fichier,int n);
