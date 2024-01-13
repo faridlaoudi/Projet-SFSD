@@ -67,6 +67,7 @@ void writeFichier(eng *engTableau, int engCount, int nbchamp, const char* filena
 }
 
 void readFromFile(const char* filename) {
+    int i=0;
     FILE *file = fopen(filename, "r+");
     if (!file) {
         perror("Error opening file");
@@ -77,12 +78,14 @@ void readFromFile(const char* filename) {
     printf("The Data of %s :\n",filename);
     while (fread(&champ, sizeof(champ), 1, file)) {
         if (champ.type == INT) {
+            printf("#0%d \n",i);
             printf("Your ID: %d\n", champ.value.intValue);
         } else if (champ.type == FLOAT) {
             printf("Your result is : %f\n", champ.value.floatValue);
         } else if (champ.type == STRING) {
             printf("Your name is : %s\n", champ.value.stringValue);
         }
+        i+=1;
     }
 
     fclose(file);
@@ -95,9 +98,10 @@ void addStruct(eng **engTableau, int *engCount, int nbchamp) {
 
     for (int j = 0; j < nbchamp; j++) {
         printf("enregistrement %d, champ %d\n", *engCount + 1, j + 1);
-        printf("Enter champ type (0 for ID, 1 for Result, 2 for name): ");
+        printf("Enter champ type (0 for Phone number, 1 for Result, 2 for name): ");
         scanf("%d", (int *)&((*engTableau)[*engCount].champs[j].type));
-
+        printf("Enter your id: ");
+        scanf("%d", &((*engTableau)[*engCount].champs[j].value.intValue));
         if ((*engTableau)[*engCount].champs[j].type == INT) {
             printf("Enter your id: ");
             scanf("%d", &((*engTableau)[*engCount].champs[j].value.intValue));
@@ -188,7 +192,7 @@ int main() {
         }
         }while(!fileOpened);
         do {
-        printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Change the current file\n6. Exit\n",filename);
+        printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Back\n6. Exit\n",filename);
         printf("entre you choice :");
         scanf("%d", &choice2);
 

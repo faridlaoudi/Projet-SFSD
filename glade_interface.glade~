@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkWindow" id="window">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkFixed" id="fixed1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkButton" id="button1">
+            <property name="label" translatable="yes">Start</property>
+            <property name="width-request">137</property>
+            <property name="height-request">38</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Click me</property>
+            <signal name="clicked" handler="on_button1_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">148</property>
+            <property name="y">200</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="logo">
+            <property name="width-request">154</property>
+            <property name="height-request">153</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="pixbuf">../../Downloads/DALL_E_2024-01-12_18.04.26_-_A_logo_symbolizing_data_and_file_visualization_in_the_C_programming_language._The_design_should_be_very_clean_and_simple__incorporating_elements_like_-removebg-preview.png</property>
+          </object>
+          <packing>
+            <property name="x">142</property>
+            <property name="y">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="width-request">106</property>
+            <property name="height-request">26</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Visualisation of Files manipulation with C</property>
+            <attributes>
+              <attribute name="style" value="normal"/>
+              <attribute name="weight" value="ultrabold"/>
+              <attribute name="variant" value="normal"/>
+              <attribute name="stretch" value="normal"/>
+              <attribute name="foreground" value="#5e5e5c5c6464"/>
+              <attribute name="size" value="12000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">71</property>
+            <property name="y">165</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="signature">
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">              LAOUDI FARID 
+             DROUL NESRINE 
+Computer science engineering
+                -Section A - G3</property>
+            <attributes>
+              <attribute name="style" value="normal"/>
+              <attribute name="weight" value="ultrabold"/>
+              <attribute name="variant" value="normal"/>
+              <attribute name="foreground" value="#5e5e5c5c6464"/>
+              <attribute name="size" value="6000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">323</property>
+            <property name="y">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
