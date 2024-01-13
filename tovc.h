@@ -54,4 +54,4 @@ void writeDir(TOVC *Pointeur, int i, BUFFER buff);     //pour l'écriture d'un b
 int allocBloc(TOVC *Pointeur);  
 void AfficheTout(TOVC* fichier);
 //i added this 
-TOVC *facteur(char *fichier,int n);
+TOVC *facteur(char *fichier,int n);//
