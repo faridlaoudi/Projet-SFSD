@@ -2,6 +2,71 @@
 <!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkWindow" id="screen">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkFixed" id="fixed2">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkButton" id="create">
+            <property name="label" translatable="yes">Create file</property>
+            <property name="width-request">113</property>
+            <property name="height-request">39</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="x">4</property>
+            <property name="y">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="insert">
+            <property name="label" translatable="yes">Insertion</property>
+            <property name="width-request">113</property>
+            <property name="height-request">39</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="x">123</property>
+            <property name="y">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="delete">
+            <property name="label" translatable="yes">Delete</property>
+            <property name="width-request">113</property>
+            <property name="height-request">39</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="x">246</property>
+            <property name="y">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="search">
+            <property name="label" translatable="yes">Search</property>
+            <property name="width-request">113</property>
+            <property name="height-request">39</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+          </object>
+          <packing>
+            <property name="x">375</property>
+            <property name="y">5</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkWindow" id="window">
     <property name="can-focus">False</property>
     <child>
@@ -17,45 +82,11 @@
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Click me</property>
-            <signal name="clicked" handler="on_button1_clicked" swapped="no"/>
+            <signal name="clicked" handler="on" swapped="no"/>
           </object>
           <packing>
             <property name="x">148</property>
             <property name="y">200</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage" id="logo">
-            <property name="width-request">154</property>
-            <property name="height-request">153</property>
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="pixbuf">../../Downloads/DALL_E_2024-01-12_18.04.26_-_A_logo_symbolizing_data_and_file_visualization_in_the_C_programming_language._The_design_should_be_very_clean_and_simple__incorporating_elements_like_-removebg-preview.png</property>
-          </object>
-          <packing>
-            <property name="x">142</property>
-            <property name="y">10</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="title">
-            <property name="width-request">106</property>
-            <property name="height-request">26</property>
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Visualisation of Files manipulation with C</property>
-            <attributes>
-              <attribute name="style" value="normal"/>
-              <attribute name="weight" value="ultrabold"/>
-              <attribute name="variant" value="normal"/>
-              <attribute name="stretch" value="normal"/>
-              <attribute name="foreground" value="#5e5e5c5c6464"/>
-              <attribute name="size" value="12000"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="x">71</property>
-            <property name="y">165</property>
           </packing>
         </child>
         <child>
@@ -79,6 +110,40 @@ Computer science engineering
           <packing>
             <property name="x">323</property>
             <property name="y">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="logo">
+            <property name="width-request">100</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="pixbuf">../../Downloads/DALL_E_2024-01-12_18.04.26_-_A_logo_symbolizing_data_and_file_visualization_in_the_C_programming_language._The_design_should_be_very_clean_and_simple__incorporating_elements_like_-removebg-preview.png</property>
+          </object>
+          <packing>
+            <property name="x">137</property>
+            <property name="y">12</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="width-request">106</property>
+            <property name="height-request">26</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Visualisation of Files manipulation with C</property>
+            <attributes>
+              <attribute name="style" value="normal"/>
+              <attribute name="weight" value="ultrabold"/>
+              <attribute name="variant" value="normal"/>
+              <attribute name="stretch" value="normal"/>
+              <attribute name="foreground" value="#5e5e5c5c6464"/>
+              <attribute name="size" value="12000"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">71</property>
+            <property name="y">165</property>
           </packing>
         </child>
       </object>

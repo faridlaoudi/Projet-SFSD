@@ -6,7 +6,7 @@
 #include <dirent.h>
 
 GtkWidget *window;
-GtkWidget *window2;
+GtkWidget *screen;
 GtkWidget *fixed1;
 GtkWidget *fixed2;
 GtkButton *button1;
@@ -18,15 +18,21 @@ GtkWidget *signature;
 GtkLabel *title;
 GtkWidget *logo;
 
+void on_button1_clicked(GtkButton *button, gpointer user_data){
+    g_print("Button clicked\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(window);
+}
+
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
     GtkBuilder *builder = gtk_builder_new_from_file("glade_interface.glade");
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window"));
-    window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window2"));
+    screen = GTK_WIDGET(gtk_builder_get_object(builder, "screen"));
    
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(window2, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(screen, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     
     
     gtk_builder_connect_signals(builder, NULL);
@@ -41,16 +47,10 @@ int main(int argc, char *argv[]) {
     signature = GTK_WIDGET(gtk_builder_get_object(builder, "signature"));
     logo = GTK_WIDGET(gtk_builder_get_object(builder, "logo"));
     title = GTK_LABEL(gtk_builder_get_object(builder, "title"));
+    g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
 
     
-    gtk_widget_show(window);
-    gtk_widget_hide(window2);
+    gtk_widget_show_all(window);
     gtk_main();
     return EXIT_SUCCESS;
-}
-
-void on_button1_clicked(GtkButton *button, gpointer user_data){
-    g_print("Button clicked\n");  // Debug print
-    gtk_widget_show(window2);
-    gtk_widget_hide(window);
 }
