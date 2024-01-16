@@ -183,6 +183,19 @@
             <property name="y">6</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="lb">
+            <property name="width-request">50</property>
+            <property name="height-request">24</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">SFSD</property>
+          </object>
+          <packing>
+            <property name="x">448</property>
+            <property name="y">224</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>

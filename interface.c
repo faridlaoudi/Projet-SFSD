@@ -64,6 +64,7 @@ int main(int argc, char *argv[]) {
     GtkWidget *ok = GTK_WIDGET(gtk_builder_get_object(builder, "ok"));
     GtkWidget *entry1 = GTK_WIDGET(gtk_builder_get_object(builder, "entry1"));
     GtkWidget *entry2 = GTK_WIDGET(gtk_builder_get_object(builder, "entry2"));
+    GtkLabel *lb = GTK_LABEL(gtk_builder_get_object(builder, "lb"));
    
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(screen, "destroy", G_CALLBACK(gtk_main_quit), NULL);
