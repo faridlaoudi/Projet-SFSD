@@ -2,11 +2,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 
 #define Taille_Bloc 50
 #define Max_enreg 20
 #define b 3
 
+
+int hasExtension(const char *fileName, const char *extension) {
+    const char *dot = strrchr(fileName, '.');
+    if (!dot || dot == fileName) return 0;
+    return strcmp(dot, extension) == 0;
+}
+
+void listFiles(const char *path, const char *extension) {
+    struct dirent *entry;
+    DIR *dir = opendir(path);
+
+    if (dir == NULL) {
+        perror("Error opening directory");
+        return;
+    }
+
+    printf("avialable files :\n");
+    while ((entry = readdir(dir)) != NULL) {
+        if (hasExtension(entry->d_name, extension)) {
+            printf("%s\n", entry->d_name);
+        }
+    }
+
+    closedir(dir);
+}
 typedef struct Tbloc
 {
 	char chaine[Taille_Bloc+1];
@@ -50,7 +76,13 @@ TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nou
     {
         fread(&(I->entete),sizeof(Entete),1,I->F);
     }
-    else
+    else if (I->F == NULL)
+    {
+        free(I);
+    perror("Error opening file");
+    return NULL;
+    }
+    else 
     {
         (I->entete).adr_dernier_bloc=0;
         (I->entete).nbr_enreg=0;
@@ -67,6 +99,7 @@ void fermer(TOVC * filepointer)
     fseek(filepointer->F,0,0);
     fwrite(&(filepointer->entete),sizeof(Entete),1,filepointer->F);
     fclose(filepointer->F);
+    free(filepointer);
 
 }
 
@@ -253,7 +286,13 @@ void Recherche_TOVC(TOVC *filepointer,int cle,int *i,int *j,int *trouv)
         (*j)=j1;
         if (((*i)==entete(filepointer,1)) && (*j)==entete(filepointer,3)) break;
     }
-    if ((entete(filepointer,1)>0) && ((!E.sup) && (E.cle==cle))) (*trouv)=1;
+    if ((entete(filepointer,1)>0) && ((!E.sup) && (E.cle==cle)))
+    {
+        (*trouv)=1;
+    }else 
+    {
+        printf("Invalid key\n");
+    }
 }
 
 void insertion_pos_rec(TOVC *filepointer,int *i,int *j,semi_enreg SE)
@@ -331,7 +370,7 @@ void suppression_TOVC(TOVC *filepointer,int cle)
         aff_entete(filepointer,4,entete(filepointer,4)+1);
     }
 }
-
+/* 
 void Suppression_phisique_TOVC(TOVC *filepointer,int cle)
 {
     int i,i1,j,j1,k,trouv;
@@ -369,8 +408,8 @@ void Suppression_phisique_TOVC(TOVC *filepointer,int cle)
         aff_entete(filepointer,3,j);
         aff_entete(filepointer,2,entete(filepointer,2)-1);
 
-    }
-}TOVC* creation(char* file_name, int nb) {
+    } */
+TOVC* creation(char* file_name, int nb) {
     // Open a new file for writing
     TOVC* filepointer = ouvrir(file_name, 'N');
     if (filepointer == NULL) {
@@ -382,7 +421,7 @@ void Suppression_phisique_TOVC(TOVC *filepointer,int cle)
     record.cle=0;
     for (int i = 1; i <= nb; i++) {
         // Get user input for the record data
-        printf("Enterer le cle de %d enrefistrement:\n", i);
+        printf("Enterer le cle de %d enregistrement:\n", i);
         scanf("%d",&record.cle);
         printf("les donnees: ");
         scanf("%s", &record.info);
@@ -417,93 +456,137 @@ void Suppression_phisique_TOVC(TOVC *filepointer,int cle)
 int main()
 {
     char filename[20];
-    int nbenrg;
-
-    printf("Enter file name: ");
-    scanf("%s", filename);
-
-    printf("Enter number of records: ");
-    scanf("%d", &nbenrg);
-
-    TOVC *filepointer = creation(filename, nbenrg);
-
-    int choice;
-    do
-    {
+    int nbenrg,choice1,choice2,chfile,searchKey, found,deleteKey;
+    int fileOpened = 0;
+    do{
+        do {
+        chfile=0;
         printf("\nMenu:\n");
-        printf("1. Insert a new record\n");
-        printf("2. Delete an existing record\n");
-        printf("3. Search based on key\n");
-        printf("4. Display file contents\n");
-        printf("5. Display header information\n");
+        printf("1. Open an existing file\n");
+        printf("2. Create a new file\n");
+        printf("3. Delete file\n");
         printf("0. Exit\n");
-
         printf("Enter your choice: ");
-        scanf("%d", &choice);
+        scanf("%d", &choice1);
 
-        switch (choice)
-        {
-        case 1:
-        {
-            Enreg newRecord;
-            newRecord.cle = 0;
-            newRecord.sup = 0;
+            switch (choice1) {
+                case 1: // Open existing file
+                    if (fileOpened) {
+                    printf("A file is already open. Please close it first.\n");
+                    } else {
+                    printf("Enter the name of the file to open: \n");
+                    listFiles(".", ".bin");
+                    scanf("%s", filename);
+                    fileOpened = 1;
+                    }
+                break;
+                case 2: // Create new file
+                    if (fileOpened) {
+                    printf("A file is already open. Please close it first.\n");
+                    } else {
+                    printf("Enter the name for new file (add .bin): ");
+                    scanf("%s", filename);
+                    printf("Enter the number of records: ");
+                    scanf("%d", &nbenrg);
+                    TOVC *filepointer = creation(filename, nbenrg);
+                    fileOpened = 1;
+                    if (filepointer == NULL) {
+                        perror("Error creating file");
+                    } else {
+                        fclose(filepointer->F);
+                        printf("New file created.\n");
+                    }
+                }
+                break;
+                case 3: // delete file
+                    printf("Enter the name of the file to delete: \n");
+                    listFiles(".", ".txt");
+                    scanf("%s", filename);
+                    remove(filename);
+                    fileOpened = 0;
+                break;
+                case 0: // Exit
+                    printf("Exiting...\n");
+                break;
+                default:
+                printf("Invalid choice. Please try again.\n");
+            }
+        }while(!fileOpened);
+        do {
+         printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Display header information\n6. Back\n0. Exit\n",filename);
+         printf("entre you choice :");
+         scanf("%d", &choice2);
+         TOVC *filepointer = ouvrir(filename, 'A');
 
-            printf("Enter the key of the new record: ");
-            scanf("%d", &newRecord.cle);
+            switch (choice2) {
+                case 1: // Insert new record
+                if (!fileOpened) {
+                    printf("No file is open. Please open or create a file first.\n");
+                } else {
+                    Enreg newRecord;
+                    newRecord.cle = 0;
+                    newRecord.sup = 0;
+                    printf("Enter the key of the new record: ");
+                    scanf("%d", &newRecord.cle);
+                    printf("Enter the information of the new record: ");
+                    scanf("%s", &newRecord.info);
+                    insertion_TOVC(filepointer, newRecord);
+                }
+                break;
+                case 2: // View Data
+                if (!fileOpened) {
+                    printf("No file is open. Please open or create a file first.\n");
+                } else {
+                    affich_TOVC(filepointer);
+                }
+                break;
+                case 3: // Delete a record
+                if (!fileOpened) {
+                    printf("No file is open. Please open or create a file first.\n");
+                } else {
+                    printf("Enter the key of the record to delete: ");
+                    scanf("%d", &deleteKey);
+                    suppression_TOVC(filepointer, deleteKey);
+                }
+                break;
+                case 4:
+                    int i=0,j=0;
+                    printf("Enter the key to search for: \n");
+                    scanf("%d", &searchKey);
+                    Recherche_TOVC(filepointer, searchKey, &i, &j, &found);
 
-            printf("Enter the information of the new record: ");
-            scanf("%s", newRecord.info);
+                    if (found){
+                        printf("Record with key %d found at block %d, position %d.\n", searchKey, i, j);
+                    }else{
+                        printf("Record with key %d not found.\n", searchKey);
+                    }
+                break;
+                case 5:
+                    printf("Header Information:\n");
+                    printf("Number of blocks: %d\n", entete(filepointer, 1));
+                    printf("Number of records: %d\n", entete(filepointer, 2));
+                    printf("Free index: %d\n", entete(filepointer, 3));
+                    printf("Number of deleted records: %d\n", entete(filepointer, 4));
+                break;
+                case 6:
+                //change file
+                FILE *file = fopen(filename, "a+");
+                fclose(file);
+                fileOpened=0;
+                chfile=1;
+                break;
+                case 0:
+                printf("Good bye\n");
+                break;
+                default:
+                printf("Invalid choice. Please try again.\n");
+            }
+        }while (choice1 !=0 && choice2 !=6);
+    }while(chfile==1 && choice2 != 0 && choice1 != 0);
 
-            insertion_TOVC(filepointer, newRecord);
-            break;
-        }
-        case 2:
-        {
-            int deleteKey;
-            printf("Enter the key of the record to delete: ");
-            scanf("%d", &deleteKey);
-
-            suppression_TOVC(filepointer, deleteKey);
-            break;
-        }
-        case 3:
-        {
-            int searchKey, i, j, found;
-            printf("Enter the key to search for: ");
-            scanf("%d", &searchKey);
-
-            Recherche_TOVC(filepointer, searchKey, &i, &j, &found);
-
-            if (found)
-                printf("Record with key %d found at block %d, position %d.\n", searchKey, i, j);
-            else
-                printf("Record with key %d not found.\n", searchKey);
-
-            break;
-        }
-        case 4:
-            affich_TOVC(filepointer);
-            break;
-        case 5:
-            printf("Header Information:\n");
-            printf("Number of blocks: %d\n", entete(filepointer, 1));
-            printf("Number of records: %d\n", entete(filepointer, 2));
-            printf("Free index: %d\n", entete(filepointer, 3));
-            printf("Number of deleted records: %d\n", entete(filepointer, 4));
-            break;
-        case 0:
-            // Exit the program
-            break;
-        default:
-            printf("Invalid choice. Please try again.\n");
-            break;
-        }
-
-    } while (choice != 0);
-
-    // Close the file before exiting
-    fermer(filepointer);
+    //i will add function to free the storage
+    //fix the exit option
+    //fix the data save
 
     return 0;
 }
