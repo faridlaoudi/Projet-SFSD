@@ -46,7 +46,7 @@ typedef struct Enreg
 {
     // taille de la longueur = 3
     int cle; //cle < = 999
-    int sup; // booleen
+    int sup; // bool�en
     char info[Taille_Bloc-6];
 }   Enreg;
 
@@ -64,6 +64,9 @@ typedef struct TOVC
     Entete entete;
 }	TOVC;
 
+//---------------------------------------------------------------------
+//-----DEFENITION DU MODELE--------------------------------------------
+//---------------------------------------------------------------------
 
 TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nouveau (wb+)
 {
@@ -76,13 +79,7 @@ TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nou
     {
         fread(&(I->entete),sizeof(Entete),1,I->F);
     }
-    else if (I->F == NULL)
-    {
-        free(I);
-    perror("Error opening file");
-    return NULL;
-    }
-    else 
+    else
     {
         (I->entete).adr_dernier_bloc=0;
         (I->entete).nbr_enreg=0;
@@ -93,54 +90,53 @@ TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nou
     return I;
 }
 
-void fermer(TOVC * filepointer)
+void fermer(TOVC * pF)
 {
 
-    fseek(filepointer->F,0,0);
-    fwrite(&(filepointer->entete),sizeof(Entete),1,filepointer->F);
-    fclose(filepointer->F);
-    free(filepointer);
+    fseek(pF->F,0,0);
+    fwrite(&(pF->entete),sizeof(Entete),1,pF->F);
+    fclose(pF->F);
 
 }
 
-int entete(TOVC *filepointer,int i)
+int entete(TOVC *pF,int i)
 {
-    if (i==1) return ((filepointer->entete).adr_dernier_bloc);
-    if (i==2) return ((filepointer->entete).nbr_enreg);
-    if (i==4) return ((filepointer->entete).nb_sup);
-    return ((filepointer->entete).indice_libre);
+    if (i==1) return ((pF->entete).adr_dernier_bloc);
+    if (i==2) return ((pF->entete).nbr_enreg);
+    if (i==4) return ((pF->entete).nb_sup);
+    return ((pF->entete).indice_libre);
 }
 
-void aff_entete(TOVC *filepointer,int i,int val)
+void aff_entete(TOVC *pF,int i,int val)
 {
-    if (i==1) (filepointer->entete).adr_dernier_bloc=val;
-    else if (i==2) (filepointer->entete).nbr_enreg=val;
-    else if (i==4) (filepointer->entete).nb_sup=val;
-    else (filepointer->entete).indice_libre=val;
+    if (i==1) (pF->entete).adr_dernier_bloc=val;
+    else if (i==2) (pF->entete).nbr_enreg=val;
+    else if (i==4) (pF->entete).nb_sup=val;
+    else (pF->entete).indice_libre=val;
 }
 
-void liredir(TOVC *filepointer,int i,Buffer *buf)
+void liredir(TOVC *pF,int i,Buffer *buf)
 {
-    if (i<=entete(filepointer,1))
+    if (i<=entete(pF,1))
     {
-        fseek(filepointer->F,sizeof(Entete)+(i-1)*sizeof(Tbloc),SEEK_SET);
-        fread(buf,sizeof(Tbloc),1,filepointer->F);
+        fseek(pF->F,sizeof(Entete)+(i-1)*sizeof(Tbloc),SEEK_SET);
+        fread(buf,sizeof(Tbloc),1,pF->F);
     }
 }
 
-void ecriredir(TOVC *filepointer,int i,Buffer buf)
+void ecriredir(TOVC *pF,int i,Buffer buf)
 {
-    if (i<=entete(filepointer,1))
+    if (i<=entete(pF,1))
     {
-        fseek(filepointer->F,sizeof(Entete)+(i-1)*sizeof(Tbloc),SEEK_SET);
-        fwrite(&buf,sizeof(Tbloc),1,filepointer->F);
+        fseek(pF->F,sizeof(Entete)+(i-1)*sizeof(Tbloc),SEEK_SET);
+        fwrite(&buf,sizeof(Tbloc),1,pF->F);
     }
 }
 
-int alloc_bloc(TOVC *filepointer)
+int alloc_bloc(TOVC *pF)
 {
-    aff_entete(filepointer,1,entete(filepointer,1)+1);
-    return entete(filepointer,1);
+    aff_entete(pF,1,entete(pF,1)+1);
+    return entete(pF,1);
 }
 
 void NumtoS(int Num,int max,char* S)
@@ -205,12 +201,12 @@ void SemitoEnreg(semi_enreg SE,Enreg *E)
     sub_string(SE,7,strlen(SE)-7,E->info);
 }
 
-void recupsemi_enreg(TOVC *filepointer,semi_enreg SE,int *i,int *j) //a modifier ! comme hidouci
+void recupsemi_enreg(TOVC *pF,semi_enreg SE,int *i,int *j) //a modifier ! comme hidouci
 {
     int taille;
     char inter[Taille_Bloc+1],inter2[Taille_Bloc+1];
     Buffer buf;
-    liredir(filepointer,*i,&buf);
+    liredir(pF,*i,&buf);
     sub_string(buf.chaine,*j,3,inter);
     if (strlen(inter)==3)
     {
@@ -221,7 +217,7 @@ void recupsemi_enreg(TOVC *filepointer,semi_enreg SE,int *i,int *j) //a modifier
     {
         (*i)++;
         (*j)=0;
-        liredir(filepointer,*i,&buf);
+        liredir(pF,*i,&buf);
         sub_string(buf.chaine,*j,3-strlen(inter),inter2);
         sprintf(inter,"%s%s",inter,inter2);
         taille=atoi(inter);
@@ -238,7 +234,7 @@ void recupsemi_enreg(TOVC *filepointer,semi_enreg SE,int *i,int *j) //a modifier
     {
         (*i)++;
         (*j)=0;
-        liredir(filepointer,*i,&buf);
+        liredir(pF,*i,&buf);
         sub_string(buf.chaine,*j,taille+4-strlen(inter),inter2);
         sprintf(inter,"%s%s",inter,inter2);
         sprintf(SE,"%s%s",SE,inter);
@@ -247,28 +243,28 @@ void recupsemi_enreg(TOVC *filepointer,semi_enreg SE,int *i,int *j) //a modifier
 }
 
 
-void affich_TOVC(TOVC * filepointer)
+void affich_TOVC(TOVC * pF)
 {
     int i=1,i1=1,j=0,j1=0;
     Enreg E;
     semi_enreg SE;
-    printf("ENTETE : %d\t%d\t%d\t%d\n",entete(filepointer,1),entete(filepointer,2),entete(filepointer,3),entete(filepointer,4));
-    while (i<=entete(filepointer,1))
+    printf("ENTETE : %d\t%d\t%d\t%d\n",entete(pF,1),entete(pF,2),entete(pF,3),entete(pF,4));
+    while (i<=entete(pF,1))
     {
-        recupsemi_enreg(filepointer,SE,&i1,&j1);
+        recupsemi_enreg(pF,SE,&i1,&j1);
         SemitoEnreg(SE,&E);
         printf("%d|%d|%s",E.cle,E.sup,E.info);
         if (i==i1) printf(" Dans le Bloc %d\n",i);
         else printf(" commence du bloc %d et chevauche le bloc %d\n",i,i1);
         if (j1==Taille_Bloc) {i1++;j1=0;}
         i=i1;j=j1;
-        if ((i==entete(filepointer,1)) && j==entete(filepointer,3)) break;
+        if ((i==entete(pF,1)) && j==entete(pF,3)) break;
     }
 }
 
 
 
-void Recherche_TOVC(TOVC *filepointer,int cle,int *i,int *j,int *trouv)
+void Recherche_TOVC(TOVC *pF,int cle,int *i,int *j,int *trouv)
 {
     (*trouv)=0;
     (*i)=1;
@@ -277,186 +273,144 @@ void Recherche_TOVC(TOVC *filepointer,int cle,int *i,int *j,int *trouv)
     int j1=0;
     semi_enreg SE;
     Enreg E;
-    while (!(*trouv) && (*i)<=entete(filepointer,1))
+    while (!(*trouv) && (*i)<=entete(pF,1))
     {
-        recupsemi_enreg(filepointer,SE,&i1,&j1);
+        recupsemi_enreg(pF,SE,&i1,&j1);
         SemitoEnreg(SE,&E);
         if (!E.sup && E.cle>=cle) break;
         (*i)=i1;
         (*j)=j1;
-        if (((*i)==entete(filepointer,1)) && (*j)==entete(filepointer,3)) break;
+        if (((*i)==entete(pF,1)) && (*j)==entete(pF,3)) break;
     }
-    if ((entete(filepointer,1)>0) && ((!E.sup) && (E.cle==cle)))
-    {
-        (*trouv)=1;
-    }else 
-    {
-        printf("Invalid key\n");
-    }
+    if ((entete(pF,1)>0) && ((!E.sup) && (E.cle==cle))) (*trouv)=1;
 }
 
-void insertion_pos_rec(TOVC *filepointer,int *i,int *j,semi_enreg SE)
+void insertion_pos_rec(TOVC *pF,int *i,int *j,semi_enreg SE)
 {
 
     //SI Semi enregistrement
     Buffer buf;
     semi_enreg inter1,inter2;
     semi_enreg SI;
-    if ((*i)<=entete(filepointer,1))
+    if ((*i)<=entete(pF,1))
     {
-        liredir(filepointer,(*i),&buf);
+        liredir(pF,(*i),&buf);
         sub_string(SE,0,Taille_Bloc-(*j),inter1);
         sub_string(SE,strlen(inter1),strlen(SE),inter2);
         sub_string(buf.chaine,(*j),Taille_Bloc,SI);
         buf.chaine[*j]='\0';
         sprintf(buf.chaine,"%s%s",buf.chaine,inter1);
         (*j)+=strlen(inter1);
-        ecriredir(filepointer,(*i),buf);
-        if ((*i)==entete(filepointer,1)) aff_entete(filepointer,3,*j);
+        ecriredir(pF,(*i),buf);
+        if ((*i)==entete(pF,1)) aff_entete(pF,3,*j);
         if (strlen(inter2)!=0)
         {
             (*i)+=1;
             (*j)=0;
-            insertion_pos_rec(filepointer,i,j,inter2);
+            insertion_pos_rec(pF,i,j,inter2);
         }
-        if (strlen(SI)!=0) insertion_pos_rec(filepointer,i,j,SI);
+        if (strlen(SI)!=0) insertion_pos_rec(pF,i,j,SI);
     }
     else
     {
-        alloc_bloc(filepointer);
+        alloc_bloc(pF);
         sprintf(buf.chaine,"%s",SE);
-        aff_entete(filepointer,3,strlen(SE));
+        aff_entete(pF,3,strlen(SE));
         (*j)=strlen(SE);
-        ecriredir(filepointer,(*i),buf);
+        ecriredir(pF,(*i),buf);
     }
 }
 
-void insertion_TOVC(TOVC *filepointer,Enreg E)
+void insertion_TOVC(TOVC *pF,Enreg E)
 {
     int i,j,trouv;
     Buffer Buf;
     semi_enreg SE;
-    Recherche_TOVC(filepointer,E.cle,&i,&j,&trouv);
+    Recherche_TOVC(pF,E.cle,&i,&j,&trouv);
     if (!trouv)
     {
 
         EnregtoSemi(E,SE);
-        insertion_pos_rec(filepointer,&i,&j,SE);
-        aff_entete(filepointer,2,entete(filepointer,2)+1);
+        insertion_pos_rec(pF,&i,&j,SE);
+        aff_entete(pF,2,entete(pF,2)+1);
     }
 
 
 }
-void suppression_TOVC(TOVC *filepointer,int cle)
+
+
+
+void suppression_TOVC(TOVC *pF,int cle)
 {
     int i,j,trouv;
     Buffer Buf;
-    Recherche_TOVC(filepointer,cle,&i,&j,&trouv);
+    Recherche_TOVC(pF,cle,&i,&j,&trouv);
     if (trouv)
     {
         if ((j+6)<Taille_Bloc)
         {
-            liredir(filepointer,i,&Buf);
+            liredir(pF,i,&Buf);
             Buf.chaine[j+6]='1';
-            ecriredir(filepointer,i,Buf);
+            ecriredir(pF,i,Buf);
         }
         else
         {
-            liredir(filepointer,i+1,&Buf);
+            liredir(pF,i+1,&Buf);
             Buf.chaine[(j+6)%Taille_Bloc]='1';
-            ecriredir(filepointer,i+1,Buf);
+            ecriredir(pF,i+1,Buf);
         }
-        aff_entete(filepointer,2,entete(filepointer,2)-1);
-        aff_entete(filepointer,4,entete(filepointer,4)+1);
+        aff_entete(pF,2,entete(pF,2)-1);
+        aff_entete(pF,4,entete(pF,4)+1);
     }
 }
-/* 
-void Suppression_phisique_TOVC(TOVC *filepointer,int cle)
+
+void Suppression_phisique_TOVC(TOVC *pF,int cle)
 {
     int i,i1,j,j1,k,trouv;
     semi_enreg inter1,inter2;
     semi_enreg SE;
     int stop=0;
     Buffer Buf;
-    Recherche_TOVC(filepointer,cle,&i,&j,&trouv);
+    Recherche_TOVC(pF,cle,&i,&j,&trouv);
     if (trouv)
     {
         i1=i;
         j1=j;
-        recupsemi_enreg(filepointer,SE,&i1,&j1);
+        recupsemi_enreg(pF,SE,&i1,&j1);
         while (!stop)
         {
-            recupsemi_enreg(filepointer,SE,&i1,&j1);
+            recupsemi_enreg(pF,SE,&i1,&j1);
             sub_string(SE,0,Taille_Bloc-j,inter1);
             sub_string(SE,strlen(inter1),strlen(SE),inter2);
-            liredir(filepointer,i,&Buf);
+            liredir(pF,i,&Buf);
             Buf.chaine[j]='\0';
             sprintf(Buf.chaine,"%s%s",Buf.chaine,inter1);
             j+=strlen(inter1);
-            ecriredir(filepointer,i,Buf);
+            ecriredir(pF,i,Buf);
             if (strlen(inter2)!=0)
             {
                 i=i1;
                 j=strlen(inter2);
-                liredir(filepointer,i,&Buf);
+                liredir(pF,i,&Buf);
                 for (k=0;k<j;k++) Buf.chaine[k]=inter2[k];
-                ecriredir(filepointer,i,Buf);
+                ecriredir(pF,i,Buf);
             }
-            stop=(i1==entete(filepointer,1)) && (j1==entete(filepointer,3));
+            stop=(i1==entete(pF,1)) && (j1==entete(pF,3));
         }
-        aff_entete(filepointer,1,i);
-        aff_entete(filepointer,3,j);
-        aff_entete(filepointer,2,entete(filepointer,2)-1);
+        aff_entete(pF,1,i);
+        aff_entete(pF,3,j);
+        aff_entete(pF,2,entete(pF,2)-1);
 
-    } */
-TOVC* creation(char* file_name, int nb) {
-    // Open a new file for writing
-    TOVC* filepointer = ouvrir(file_name, 'N');
-    if (filepointer == NULL) {
-        printf("Error opening the file for writing.\n");
-        return NULL;
     }
-
-    Enreg record;
-    record.cle=0;
-    for (int i = 1; i <= nb; i++) {
-        // Get user input for the record data
-        printf("Enterer le cle de %d enregistrement:\n", i);
-        scanf("%d",&record.cle);
-        printf("les donnees: ");
-        scanf("%s", &record.info);
-
-        // Write the record to the file
-        int blockNum = alloc_bloc(filepointer);
-        if (blockNum == -1) {
-            // Handle allocation failure
-            printf("Error allocating a new block.\n");
-            fermer(filepointer);
-            return NULL;
-        }
-
-        // Use writeDir function for writing
-        ecriredir(filepointer, blockNum, *(Buffer*)&record);
-    }
-
-    // Close the file after writing records
-    fermer(filepointer);
-
-    // Reopen the file in read mode
-    filepointer = ouvrir(file_name, 'A');
-    if (filepointer == NULL) {
-        // Handle reopening failure
-        printf("Error reopening the file for reading.\n");
-        return NULL;
-    }
-
-    return filepointer;
 }
+
 
 int main()
 {
     char filename[20];
-    int nbenrg,choice1,choice2,chfile,searchKey, found,deleteKey;
+    int choice1,choice2,chfile,searchKey, found,deleteKey;
+    Enreg E;
+    E.sup=0;
     int fileOpened = 0;
     do{
         do {
@@ -475,7 +429,7 @@ int main()
                     printf("A file is already open. Please close it first.\n");
                     } else {
                     printf("Enter the name of the file to open: \n");
-                    listFiles(".", ".bin");
+                    listFiles(".", ".txt");
                     scanf("%s", filename);
                     fileOpened = 1;
                     }
@@ -484,11 +438,9 @@ int main()
                     if (fileOpened) {
                     printf("A file is already open. Please close it first.\n");
                     } else {
-                    printf("Enter the name for new file (add .bin): ");
+                    printf("Enter the name for new file (add .txt): ");
                     scanf("%s", filename);
-                    printf("Enter the number of records: ");
-                    scanf("%d", &nbenrg);
-                    TOVC *filepointer = creation(filename, nbenrg);
+                    TOVC *filepointer = ouvrir(filename,'N');
                     fileOpened = 1;
                     if (filepointer == NULL) {
                         perror("Error creating file");
@@ -512,25 +464,24 @@ int main()
                 printf("Invalid choice. Please try again.\n");
             }
         }while(!fileOpened);
+        TOVC *filepointer = ouvrir(filename, 'A');
         do {
          printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Display header information\n6. Back\n0. Exit\n",filename);
          printf("entre you choice :");
          scanf("%d", &choice2);
-         TOVC *filepointer = ouvrir(filename, 'A');
 
             switch (choice2) {
                 case 1: // Insert new record
                 if (!fileOpened) {
                     printf("No file is open. Please open or create a file first.\n");
                 } else {
-                    Enreg newRecord;
-                    newRecord.cle = 0;
-                    newRecord.sup = 0;
                     printf("Enter the key of the new record: ");
-                    scanf("%d", &newRecord.cle);
+                    scanf("%d", &E.cle);
                     printf("Enter the information of the new record: ");
-                    scanf("%s", &newRecord.info);
-                    insertion_TOVC(filepointer, newRecord);
+                    scanf("%s", &E.info);
+                    insertion_TOVC(filepointer,E);
+                    Suppression_phisique_TOVC(filepointer,E.cle);
+                    printf("insertion 1 terminee\n");
                 }
                 break;
                 case 2: // View Data
@@ -544,29 +495,29 @@ int main()
                 if (!fileOpened) {
                     printf("No file is open. Please open or create a file first.\n");
                 } else {
-                    printf("Enter the key of the record to delete: ");
+                    printf("Enter the key of the record to delete: \n");
                     scanf("%d", &deleteKey);
-                    suppression_TOVC(filepointer, deleteKey);
+                    Suppression_phisique_TOVC(filepointer,deleteKey);
+                    printf("Done\n");
                 }
                 break;
-                case 4:
-                    int i=0,j=0;
+                /*case 4:
+                    int i=0,j=0,trouv;
                     printf("Enter the key to search for: \n");
                     scanf("%d", &searchKey);
-                    Recherche_TOVC(filepointer, searchKey, &i, &j, &found);
-
-                    if (found){
+                    Recherche_TOVC(filepointer,searchKey,*i,*j,*trouv)
+                    if (trouv){
                         printf("Record with key %d found at block %d, position %d.\n", searchKey, i, j);
                     }else{
                         printf("Record with key %d not found.\n", searchKey);
-                    }
-                break;
+                    } 
+                break;*/
                 case 5:
                     printf("Header Information:\n");
                     printf("Number of blocks: %d\n", entete(filepointer, 1));
                     printf("Number of records: %d\n", entete(filepointer, 2));
                     printf("Free index: %d\n", entete(filepointer, 3));
-                    printf("Number of deleted records: %d\n", entete(filepointer, 4));
+                    printf("Number of deleted records: %d\n", entete(filepointer, 4)); 
                 break;
                 case 6:
                 //change file
@@ -578,6 +529,7 @@ int main()
                 case 0:
                 printf("Good bye\n");
                 break;
+                
                 default:
                 printf("Invalid choice. Please try again.\n");
             }
