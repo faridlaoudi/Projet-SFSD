@@ -4,7 +4,7 @@
 #include <string.h>
 #include <dirent.h>
 
-#define Taille_Bloc 50
+#define Taille_Bloc 30
 #define Max_enreg 20
 #define b 3
 
@@ -468,7 +468,7 @@ int main()
                 default:
                 printf("Invalid choice. Please try again.\n");
             }
-        }while(!fileOpened);
+        }while(choice1 != 0 && !fileOpened);
         TOVC *filepointer = ouvrir(filename, 'A');
         do {
          printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Display header information\n6. Back\n0. Exit\n",filename);
@@ -480,11 +480,19 @@ int main()
                 if (!fileOpened) {
                     printf("No file is open. Please open or create a file first.\n");
                 } else {
-                    printf("Enter the key of the new record: ");
+                    do {
+                    printf("Enter the key (entier) of the new record: ");
                     scanf("%d", &E.cle);
-                    printf("Enter the information of the new record: ");
-                    scanf("%s", &E.info);
-                    insertion_TOVC(filepointer,E);
+                    // Clear the input buffer
+                    int c;
+                    while ((c = getchar()) != '\n' && c != EOF) { }
+                    }while (E.cle<0);
+
+                    printf("Enter the information of the new record: \n");
+                    fgets(E.info, sizeof(E.info), stdin); // Replace 'sizeof(E.info)' with the actual size of E.info array
+                    int l;
+                    while ((l = getchar()) != '\n' && l != EOF) { }
+                    insertion_TOVC(filepointer, E);
                     printf("insertion 1 terminee\n");
                 }
                 break;
@@ -537,8 +545,8 @@ int main()
                 default:
                 printf("Invalid choice. Please try again.\n");
             }
-        }while (choice1 !=0 && choice2 !=6);
-    }while(chfile==1 && choice2 != 0 && choice1 != 0);
+        }while (choice2 !=0 && choice2 !=6);
+    }while(choice1 != 0 && choice2 !=0 );
 
     //i will add function to free the storage
     //fix the exit option
