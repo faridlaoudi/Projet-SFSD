@@ -379,6 +379,7 @@ void Suppression_phisique_TOVC(TOVC *pF,int cle)
         recupsemi_enreg(pF,SE,&i1,&j1);
         while (!stop)
         {
+
             recupsemi_enreg(pF,SE,&i1,&j1);
             sub_string(SE,0,Taille_Bloc-j,inter1);
             sub_string(SE,strlen(inter1),strlen(SE),inter2);
@@ -397,9 +398,13 @@ void Suppression_phisique_TOVC(TOVC *pF,int cle)
             }
             stop=(i1==entete(pF,1)) && (j1==entete(pF,3));
         }
+        printf("17\n");
         aff_entete(pF,1,i);
+        printf("18\n");
         aff_entete(pF,3,j);
+        printf("19\n");
         aff_entete(pF,2,entete(pF,2)-1);
+        printf("20\n");
 
     }
 }
@@ -480,7 +485,6 @@ int main()
                     printf("Enter the information of the new record: ");
                     scanf("%s", &E.info);
                     insertion_TOVC(filepointer,E);
-                    Suppression_phisique_TOVC(filepointer,E.cle);
                     printf("insertion 1 terminee\n");
                 }
                 break;
@@ -501,17 +505,17 @@ int main()
                     printf("Done\n");
                 }
                 break;
-                /*case 4:
-                    int i=0,j=0,trouv;
+                case 4:
+                    int i,j,trouv;
                     printf("Enter the key to search for: \n");
                     scanf("%d", &searchKey);
-                    Recherche_TOVC(filepointer,searchKey,*i,*j,*trouv)
+                    Recherche_TOVC(filepointer,searchKey,&i,&j,&trouv);
                     if (trouv){
                         printf("Record with key %d found at block %d, position %d.\n", searchKey, i, j);
                     }else{
                         printf("Record with key %d not found.\n", searchKey);
                     } 
-                break;*/
+                break;
                 case 5:
                     printf("Header Information:\n");
                     printf("Number of blocks: %d\n", entete(filepointer, 1));
