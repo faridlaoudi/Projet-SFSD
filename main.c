@@ -480,18 +480,10 @@ int main()
                 if (!fileOpened) {
                     printf("No file is open. Please open or create a file first.\n");
                 } else {
-                    do {
                     printf("Enter the key (entier) of the new record: ");
                     scanf("%d", &E.cle);
-                    // Clear the input buffer
-                    int c;
-                    while ((c = getchar()) != '\n' && c != EOF) { }
-                    }while (E.cle<0);
-
                     printf("Enter the information of the new record: \n");
-                    fgets(E.info, sizeof(E.info), stdin); // Replace 'sizeof(E.info)' with the actual size of E.info array
-                    int l;
-                    while ((l = getchar()) != '\n' && l != EOF) { }
+                    scanf("%s", &E.info);
                     insertion_TOVC(filepointer, E);
                     printf("insertion 1 terminee\n");
                 }
@@ -549,8 +541,6 @@ int main()
     }while(choice1 != 0 && choice2 !=0 );
 
     //i will add function to free the storage
-    //fix the exit option
-    //fix the data save
 
     return 0;
 }
