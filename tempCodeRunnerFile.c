@@ -364,46 +364,48 @@ void suppression_TOVC(TOVC *pF,int cle)
     }
 }
 
-void Suppression_phisique_TOVC(TOVC *pF, int cle) {
-    int i, i1, j, j1, k, trouv;
-    semi_enreg inter1, inter2;
+void Suppression_phisique_TOVC(TOVC *pF,int cle)
+{
+    int i,i1,j,j1,k,trouv;
+    semi_enreg inter1,inter2;
     semi_enreg SE;
-    int stop = 0;
+    int stop=0;
     Buffer Buf;
+    Recherche_TOVC(pF,cle,&i,&j,&trouv);
+    if (trouv)
+    {
+        i1=i;
+        j1=j;
+        recupsemi_enreg(pF,SE,&i1,&j1);
+        while (!stop)
+        {
 
-    Recherche_TOVC(pF, cle, &i, &j, &trouv);
-
-    if (trouv) {
-        i1 = i;
-        j1 = j;
-        recupsemi_enreg(pF, SE, &i1, &j1);
-
-        while (!stop) {
-            recupsemi_enreg(pF, SE, &i1, &j1);
-            sub_string(SE, 0, Taille_Bloc - j, inter1);
-            sub_string(SE, strlen(inter1), strlen(SE), inter2);
-
-            liredir(pF, i, &Buf);
-            Buf.chaine[j] = '\0';
-            sprintf(Buf.chaine, "%s%s", Buf.chaine, inter1);
-            j += strlen(inter1);
-
-            ecriredir(pF, i, Buf);
-
-            if (strlen(inter2) != 0) {
-                i = i1;
-                j = 0;  // Reset j to 0 as we move to the next block
-                liredir(pF, i, &Buf);
-                strcpy(Buf.chaine, inter2);  // Copy inter2 to the beginning of Buf.chaine
-                ecriredir(pF, i, Buf);
+            recupsemi_enreg(pF,SE,&i1,&j1);
+            sub_string(SE,0,Taille_Bloc-j,inter1);
+            sub_string(SE,strlen(inter1),strlen(SE),inter2);
+            liredir(pF,i,&Buf);
+            Buf.chaine[j]='\0';
+            sprintf(Buf.chaine,"%s%s",Buf.chaine,inter1);
+            j+=strlen(inter1);
+            ecriredir(pF,i,Buf);
+            if (strlen(inter2)!=0)
+            {
+                i=i1;
+                j=strlen(inter2);
+                liredir(pF,i,&Buf);
+                for (k=0;k<j;k++) Buf.chaine[k]=inter2[k];
+                ecriredir(pF,i,Buf);
             }
-
-            // Update stop condition to check if i1 and j1 reached the end
-            stop = (i1 > entete(pF, 1)) || ((i1 == entete(pF, 1)) && (j1 >= entete(pF, 3)));
+            stop=(i1==entete(pF,1)) && (j1==entete(pF,3));
         }
+        printf("17\n");
         aff_entete(pF,1,i);
+        printf("18\n");
         aff_entete(pF,3,j);
+        printf("19\n");
         aff_entete(pF,2,entete(pF,2)-1);
+        printf("20\n");
+
     }
 }
 
