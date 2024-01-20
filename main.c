@@ -471,7 +471,7 @@ int main()
         }while(choice1 != 0 && !fileOpened);
         TOVC *filepointer = ouvrir(filename, 'A');
         do {
-         printf("you are in %s \n1. Insert new enregistremetn\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Display header information\n6. Back\n0. Exit\n",filename);
+         printf("you are in %s \n1. Insert new enregistrement\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Display header information\n6. Back\n0. Exit\n",filename);
          printf("entre you choice :");
          scanf("%d", &choice2);
 
@@ -482,7 +482,7 @@ int main()
                 } else {
                     printf("Enter the key (entier) of the new record: ");
                     scanf("%d", &E.cle);
-                    printf("Enter the information of the new record: \n");
+                    printf("Enter the information of the new record: ");
                     scanf("%s", &E.info);
                     insertion_TOVC(filepointer, E);
                     printf("insertion 1 terminee\n");
@@ -499,7 +499,7 @@ int main()
                 if (!fileOpened) {
                     printf("No file is open. Please open or create a file first.\n");
                 } else {
-                    printf("Enter the key of the record to delete: \n");
+                    printf("Enter the key of the record to delete: ");
                     scanf("%d", &deleteKey);
                     Suppression_phisique_TOVC(filepointer,deleteKey);
                     printf("Done\n");
@@ -507,7 +507,7 @@ int main()
                 break;
                 case 4:
                     int i,j,trouv;
-                    printf("Enter the key to search for: \n");
+                    printf("Enter the key to search for: ");
                     scanf("%d", &searchKey);
                     Recherche_TOVC(filepointer,searchKey,&i,&j,&trouv);
                     if (trouv){
@@ -541,6 +541,7 @@ int main()
     }while(choice1 != 0 && choice2 !=0 );
 
     //i will add function to free the storage
+    //need to fix the delete function
 
     return 0;
 }
