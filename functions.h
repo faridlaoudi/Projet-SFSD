@@ -61,7 +61,7 @@ typedef struct TOVC
     Entete entete;
 }	TOVC;
 
-TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nouveau (wb+)
+/* TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nouveau (wb+)
 {
     TOVC *I = malloc(sizeof(TOVC));
     char s[3];
@@ -81,7 +81,7 @@ TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nou
         fwrite(&(I->entete),sizeof(Entete),1,I->F);
     }
     return I;
-}
+} */
 TOVC *ouvrir(const gchar* filename,char mod) // pour gtk
 {
     TOVC *I = malloc(sizeof(TOVC));

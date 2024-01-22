@@ -13,7 +13,7 @@ void on_button1_clicked(GtkButton *button, gpointer user_data){
     g_print("Button clicked\n");  // Debug print
     gtk_widget_show_all(screen);
     gtk_widget_hide(window);
-    const gchar *text = " ";
+    char *text = " ";
     int i=1;
     struct dirent *entry;
     DIR *dir = opendir(".");
@@ -48,10 +48,10 @@ void on_create_clicked(GtkButton *button, gpointer user_data) {
 
 void on_view_clicked(GtkButton *button, gpointer user_data){
         g_print("view\n");  // Debug print
-        const gchar *text2 = " ";
-        const gchar *text3 = " ";
-        const gchar *text4 = " ";
-        TOVC *filepointer = ouvrir(text1,'N');
+        char *text2 = " ";
+        char *text3 = " ";
+        char *text4 = " ";
+        TOVC *filepointer = ouvrir(text1,'A');
         int i=1,i1=1,j=0,j1=0;
         Enreg E;
         semi_enreg SE;
@@ -96,8 +96,6 @@ void on_check_toggled(GtkWidget *w) {
  
  }
 void on_entry1_changed(GtkWidget *w) {
-    printf("%s\n", "Name is :");
-    printf("\t%s\n", gtk_entry_get_text(GTK_ENTRY(w)));
     text1 =gtk_entry_get_text(GTK_ENTRY(w));
  }
 
