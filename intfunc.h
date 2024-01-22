@@ -2,31 +2,9 @@
 #define INTFUNC_H
 #include"functions.h"
 #include <dirent.h>
-
-void on_create_clicked(GtkButton *button, gpointer user_data) {
-    gtk_widget_show_all(dialog);
-    gint response = gtk_dialog_run(GTK_DIALOG(dialog));
-}
-void on_ok_clicked(GtkButton *button, gpointer user_data){
-    g_print("ok\n");  // Debug print
-    gtk_widget_show_all(screen);
-    gtk_widget_hide(dialog);
-}
-void on_cancel_clicked(GtkButton *button, gpointer user_data){
-    g_print("cancel\n");  // Debug print
-    gtk_widget_show_all(screen);
-    gtk_widget_hide(dialog);
-}
-void on_check_toggled(GtkWidget *w) {
- printf("%s\n", "on.SampleGtkCheckButton.toggled.h");
- printf("\tchecked = %d\n", gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w)));
- }
-void on_entry1_changed(GtkWidget *w) {
- printf("%s\n", "Name is :");
- printf("\t%s\n", gtk_entry_get_text(GTK_ENTRY(w)));
- }
-
+gchar *text1 = " ";
 //main screen
+
 void on_search_clicked(GtkButton *button, gpointer user_data) {
     g_print("Button clicked\n");
     gtk_label_set_text (GTK_LABEL(files1), "hi");
@@ -59,7 +37,43 @@ void on_button1_clicked(GtkButton *button, gpointer user_data){
     }
     gtk_label_set_text (GTK_LABEL(files1), text);
     closedir(dir);
+    
 }
+void on_create_clicked(GtkButton *button, gpointer user_data) {
+    gtk_widget_show_all(dialog);
+    gint response = gtk_dialog_run(GTK_DIALOG(dialog));
+}
+
+ //create and open files
+
+ void on_ok_clicked(GtkButton *button, gpointer user_data){
+        g_print("ok\n");  // Debug print
+        gtk_widget_show_all(screen);
+        gtk_widget_hide(dialog);
+        TOVC *filepointer = ouvrir(text1,'N');
+        gtk_label_set_text (GTK_LABEL(files), "You are in :");
+        gtk_label_set_text (GTK_LABEL(files1), text1);
+        closedir(dir);
+    }
+void on_cancel_clicked(GtkButton *button, gpointer user_data){
+    g_print("cancel\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialog);
+}
+
+void on_check_toggled(GtkWidget *w) {
+    int j=0;
+ printf("%s\n", "on.SampleGtkCheckButton.toggled.h");
+ j=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w));
+ printf("\tchecked = %d\n", j);
+ 
+ }
+void on_entry1_changed(GtkWidget *w) {
+    printf("%s\n", "Name is :");
+    printf("\t%s\n", gtk_entry_get_text(GTK_ENTRY(w)));
+    text1 =gtk_entry_get_text(GTK_ENTRY(w));
+ }
+
 
 //insertion button
 void on_insert_clicked(GtkButton *button, gpointer user_data) {
