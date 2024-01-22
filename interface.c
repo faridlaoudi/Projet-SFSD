@@ -41,14 +41,14 @@ int main(int argc, char *argv[]) {
     cancelinsert = GTK_BUTTON(gtk_builder_get_object(builder, "cancelinsert"));
     insert = GTK_BUTTON(gtk_builder_get_object(builder, "insert"));
     delete = GTK_BUTTON(gtk_builder_get_object(builder, "delete"));
-    search = GTK_BUTTON(gtk_builder_get_object(builder, "search"));
+    search = GTK_WIDGET(gtk_builder_get_object(builder, "search"));
     signature = GTK_WIDGET(gtk_builder_get_object(builder, "signature"));
     logo = GTK_WIDGET(gtk_builder_get_object(builder, "logo"));
     title = GTK_LABEL(gtk_builder_get_object(builder, "title"));
     files = GTK_LABEL(gtk_builder_get_object(builder, "files"));
-    files1 = GTK_LABEL(gtk_builder_get_object(builder, "files1"));
+    files1 = GTK_WIDGET(gtk_builder_get_object(builder, "files1"));
     g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
-
+    g_signal_connect(search, "clicked", G_CALLBACK(on_search_clicked), NULL);
     
     gtk_widget_show_all(window);
     gtk_main();

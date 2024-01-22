@@ -1,11 +1,8 @@
 #ifndef INTFUNC_H
 #define INTFUNC_H
+#include"functions.h"
+#include <dirent.h>
 
-void on_button1_clicked(GtkButton *button, gpointer user_data){
-    g_print("Button clicked\n");  // Debug print
-    gtk_widget_show_all(screen);
-    gtk_widget_hide(window);
-}
 void on_create_clicked(GtkButton *button, gpointer user_data) {
     gtk_widget_show_all(dialog);
     gint response = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -28,15 +25,41 @@ void on_entry1_changed(GtkWidget *w) {
  printf("%s\n", "Name is :");
  printf("\t%s\n", gtk_entry_get_text(GTK_ENTRY(w)));
  }
- 
+
 //main screen
+void on_search_clicked(GtkButton *button, gpointer user_data) {
+    g_print("Button clicked\n");
+    gtk_label_set_text (GTK_LABEL(files1), "hi");
+}
 void on_button1_clicked(GtkButton *button, gpointer user_data){
     g_print("Button clicked\n");  // Debug print
     gtk_widget_show_all(screen);
     gtk_widget_hide(window);
+    gchar *text = " ";
+    int i=1;
+    struct dirent *entry;
+    DIR *dir = opendir(".");
+
+    if (dir == NULL) {
+        perror("Error opening directory");
+        return;
+    }
+
+    printf("avialable files :\n");
+    while ((entry = readdir(dir)) != NULL) {
+        if (hasExtension(entry->d_name, ".txt")) {
+            char index[10];
+            sprintf(index, "%d- ", i); // Convert integer to string
+            text = g_strconcat(text, index ,NULL);
+            text = g_strconcat(text, entry->d_name, NULL);
+            text = g_strconcat(text, "\n", NULL);
+            i++;
+            printf("%s\n", entry->d_name);
+        }
+    }
+    gtk_label_set_text (GTK_LABEL(files1), text);
+    closedir(dir);
 }
-
-
 
 //insertion button
 void on_insert_clicked(GtkButton *button, gpointer user_data) {
