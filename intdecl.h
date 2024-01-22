@@ -33,5 +33,7 @@ GtkWidget *cancelinsert;
 GtkLabel *filename;
 GtkWidget *check;
 GtkLabel *lb;
+GtkLabel *files;
+GtkLabel *files1;
 
 #endif

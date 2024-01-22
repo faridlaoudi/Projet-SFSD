@@ -28,7 +28,13 @@ void on_entry1_changed(GtkWidget *w) {
  printf("%s\n", "Name is :");
  printf("\t%s\n", gtk_entry_get_text(GTK_ENTRY(w)));
  }
-
+ 
+//main screen
+void on_button1_clicked(GtkButton *button, gpointer user_data){
+    g_print("Button clicked\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(window);
+}
 
 
 

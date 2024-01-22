@@ -45,6 +45,8 @@ int main(int argc, char *argv[]) {
     signature = GTK_WIDGET(gtk_builder_get_object(builder, "signature"));
     logo = GTK_WIDGET(gtk_builder_get_object(builder, "logo"));
     title = GTK_LABEL(gtk_builder_get_object(builder, "title"));
+    files = GTK_LABEL(gtk_builder_get_object(builder, "files"));
+    files1 = GTK_LABEL(gtk_builder_get_object(builder, "files1"));
     g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
 
     
