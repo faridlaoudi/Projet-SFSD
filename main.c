@@ -64,10 +64,6 @@ typedef struct TOVC
     Entete entete;
 }	TOVC;
 
-//---------------------------------------------------------------------
-//-----DEFENITION DU MODELE--------------------------------------------
-//---------------------------------------------------------------------
-
 TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nouveau (wb+)
 {
     TOVC *I = malloc(sizeof(TOVC));
@@ -248,14 +244,14 @@ void affich_TOVC(TOVC * pF)
     int i=1,i1=1,j=0,j1=0;
     Enreg E;
     semi_enreg SE;
-    printf("ENTETE : %d\t%d\t%d\t%d\n",entete(pF,1),entete(pF,2),entete(pF,3),entete(pF,4));
+    printf("-------------------------------   ENTETE : %d   %d   %d   %d   -------------------------------\n",entete(pF,1),entete(pF,2),entete(pF,3),entete(pF,4));
     while (i<=entete(pF,1))
     {
         recupsemi_enreg(pF,SE,&i1,&j1);
         SemitoEnreg(SE,&E);
-        printf("%d|%d|%s",E.cle,E.sup,E.info);
-        if (i==i1) printf(" Dans le Bloc %d\n",i);
-        else printf(" commence du bloc %d et chevauche le bloc %d\n",i,i1);
+        printf("-------------------------------   %d|%d|%s",E.cle,E.sup,E.info);
+        if (i==i1) printf(" Dans le Bloc %d   -------------------------------\n",i);
+        else printf(" commence du bloc %d et chevauche le bloc %d   -------------------------------\n",i,i1);
         if (j1==Taille_Bloc) {i1++;j1=0;}
         i=i1;j=j1;
         if ((i==entete(pF,1)) && j==entete(pF,3)) break;
@@ -469,7 +465,7 @@ int main()
         }while(choice1 != 0 && !fileOpened);
         TOVC *filepointer = ouvrir(filename, 'A');
         do {
-         printf("you are in %s \n1. Insert new enregistrement\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Display header information\n6. Back\n0. Exit\n",filename);
+         printf("--- you are in %s \n1. Insert new enregistrement\n2. View Data\n3. Delete an enregistrement\n4. Search\n5. Display header information\n6. Back\n0. Exit\n",filename);
          printf("entre you choice :");
          scanf("%d", &choice2);
 
