@@ -3,3 +3,4 @@
 gcc `pkg-config --cflags gtk+-3.0` interface.c -o interface -rdynamic `pkg-config --libs gtk+-3.0`
 
 
+

@@ -13,7 +13,8 @@ void on_button1_clicked(GtkButton *button, gpointer user_data){
     g_print("Button clicked\n");  // Debug print
     gtk_widget_show_all(screen);
     gtk_widget_hide(window);
-    char *text = " ";
+    char *text = g_strdup(" ");
+    gchar *old_text;
     int i=1;
     struct dirent *entry;
     DIR *dir = opendir(".");
@@ -28,11 +29,10 @@ void on_button1_clicked(GtkButton *button, gpointer user_data){
         if (hasExtension(entry->d_name, ".txt")) {
             char index[10];
             sprintf(index, "%d- ", i); // Convert integer to string
-            text = g_strconcat(text, index ,NULL);
-            text = g_strconcat(text, entry->d_name, NULL);
-            text = g_strconcat(text, "\n", NULL);
+            old_text = text;
+            text = g_strconcat(text, index, entry->d_name, "\n", NULL);
+            g_free(old_text);
             i++;
-            printf("%s\n", entry->d_name);
         }
     }
     gtk_label_set_text (GTK_LABEL(files1), text);
@@ -48,26 +48,28 @@ void on_create_clicked(GtkButton *button, gpointer user_data) {
 
 void on_view_clicked(GtkButton *button, gpointer user_data){
         g_print("view\n");  // Debug print
-        char *text2 = " ";
-        char *text3 = " ";
-        char *text4 = " ";
+        char *text2 = g_strdup(" ");  // Allocate memory
+        gchar *old_text2;
+        char *text3 = g_strdup(" ");
+        char *text4 = g_strdup(" ");
         TOVC *filepointer = ouvrir(text1,'A');
-        int i=1,i1=1,j=0,j1=0;
+        int k=1,i1=1,l=0,j1=0;
         Enreg E;
         semi_enreg SE;
-        sprintf(text2, "-------------------------------   ENTETE : %d   %d   %d   %d   -------------------------------\n",entete(filepointer,1),entete(filepointer,2),entete(filepointer,3),entete(filepointer,4));
-        while (i<=entete(filepointer,1))
+        sprintf(text2, "ENTETE : %d   %d   %d   %d\n",entete(filepointer,1),entete(filepointer,2),entete(filepointer,3),entete(filepointer,4));
+        while (k<=entete(filepointer,1))
         {
             recupsemi_enreg(filepointer,SE,&i1,&j1);
             SemitoEnreg(SE,&E);
-            sprintf(text3,"-------------------------------   %d|%d|%s",E.cle,E.sup,E.info);
-            if (i==i1) {sprintf(text4," Dans le Bloc %d   -------------------------------\n",i);}
-            else {sprintf(text4," commence du bloc %d et chevauche le bloc %d   -------------------------------\n",i,i1);}
+            sprintf(text3,"%d|%d|%s",E.cle,E.sup,E.info);
+            if (k==i1) {sprintf(text4," Dans le Bloc %d\n",k);}
+            else {sprintf(text4," commence du bloc %d et chevauche le bloc %d\n",k,i1);}
             if (j1==Taille_Bloc) {i1++;j1=0;}
-            i=i1;j=j1;
-            if ((i==entete(filepointer,1)) && j==entete(filepointer,3)) {break;}
-            text2 = g_strconcat(text2, text3, NULL);
-            text2 = g_strconcat(text2, text4, NULL);
+            k=i1;l=j1;
+            if ((k==entete(filepointer,1)) && l==entete(filepointer,3)) {break;}
+            old_text2 = text2;
+            text2 = g_strconcat(text2, text3, text4, NULL);
+            g_free(old_text2);
         }
         gtk_label_set_text (GTK_LABEL(affichage), text2);
     }
