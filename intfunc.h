@@ -2,7 +2,7 @@
 #define INTFUNC_H
 #include"functions.h"
 #include <dirent.h>
-gchar *text1 = " ";
+const gchar *text1 = " ";
 //main screen
 
 void on_search_clicked(GtkButton *button, gpointer user_data) {
@@ -13,7 +13,7 @@ void on_button1_clicked(GtkButton *button, gpointer user_data){
     g_print("Button clicked\n");  // Debug print
     gtk_widget_show_all(screen);
     gtk_widget_hide(window);
-    gchar *text = " ";
+    const gchar *text = " ";
     int i=1;
     struct dirent *entry;
     DIR *dir = opendir(".");
@@ -44,6 +44,34 @@ void on_create_clicked(GtkButton *button, gpointer user_data) {
     gint response = gtk_dialog_run(GTK_DIALOG(dialog));
 }
 
+//view Data
+
+void on_view_clicked(GtkButton *button, gpointer user_data){
+        g_print("view\n");  // Debug print
+        const gchar *text2 = " ";
+        const gchar *text3 = " ";
+        const gchar *text4 = " ";
+        TOVC *filepointer = ouvrir(text1,'N');
+        int i=1,i1=1,j=0,j1=0;
+        Enreg E;
+        semi_enreg SE;
+        sprintf(text2, "-------------------------------   ENTETE : %d   %d   %d   %d   -------------------------------\n",entete(filepointer,1),entete(filepointer,2),entete(filepointer,3),entete(filepointer,4));
+        while (i<=entete(filepointer,1))
+        {
+            recupsemi_enreg(filepointer,SE,&i1,&j1);
+            SemitoEnreg(SE,&E);
+            sprintf(text3,"-------------------------------   %d|%d|%s",E.cle,E.sup,E.info);
+            if (i==i1) {sprintf(text4," Dans le Bloc %d   -------------------------------\n",i);}
+            else {sprintf(text4," commence du bloc %d et chevauche le bloc %d   -------------------------------\n",i,i1);}
+            if (j1==Taille_Bloc) {i1++;j1=0;}
+            i=i1;j=j1;
+            if ((i==entete(filepointer,1)) && j==entete(filepointer,3)) {break;}
+            text2 = g_strconcat(text2, text3, NULL);
+            text2 = g_strconcat(text2, text4, NULL);
+        }
+        gtk_label_set_text (GTK_LABEL(affichage), text2);
+    }
+
  //create and open files
 
  void on_ok_clicked(GtkButton *button, gpointer user_data){
@@ -51,9 +79,8 @@ void on_create_clicked(GtkButton *button, gpointer user_data) {
         gtk_widget_show_all(screen);
         gtk_widget_hide(dialog);
         TOVC *filepointer = ouvrir(text1,'N');
-        gtk_label_set_text (GTK_LABEL(files), "You are in :");
+        gtk_label_set_text (GTK_LABEL(files), "");
         gtk_label_set_text (GTK_LABEL(files1), text1);
-        closedir(dir);
     }
 void on_cancel_clicked(GtkButton *button, gpointer user_data){
     g_print("cancel\n");  // Debug print

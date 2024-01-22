@@ -82,6 +82,27 @@ TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nou
     }
     return I;
 }
+TOVC *ouvrir(const gchar* filename,char mod) // pour gtk
+{
+    TOVC *I = malloc(sizeof(TOVC));
+    char s[3];
+    if ((mod == 'A') || (mod =='a')) sprintf(s,"rb+");
+    else sprintf(s,"wb+");
+    I->F=fopen(filename,s);
+    if ((mod == 'A') || (mod =='a'))
+    {
+        fread(&(I->entete),sizeof(Entete),1,I->F);
+    }
+    else
+    {
+        (I->entete).adr_dernier_bloc=0;
+        (I->entete).nbr_enreg=0;
+        (I->entete).indice_libre=0;
+        (I->entete).nb_sup=0;
+        fwrite(&(I->entete),sizeof(Entete),1,I->F);
+    }
+    return I;
+}
 
 void fermer(TOVC * pF)
 {

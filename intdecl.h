@@ -13,6 +13,7 @@ GtkButton *button1;
 GtkButton *create;
 GtkButton *insert;
 GtkButton *delete;
+GtkWidget *view;
 GtkWidget *search;
 GtkWidget *signature;
 GtkLabel *title;
@@ -35,5 +36,6 @@ GtkWidget *check;
 GtkLabel *lb;
 GtkLabel *files;
 GtkWidget *files1;
+GtkWidget *affichage;
 
 #endif
