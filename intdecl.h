@@ -25,7 +25,7 @@ GtkWidget *dialog1;
 GtkWidget *dialoginsert;
 GtkWidget *dialoginsert1;
 GtkLabel *clee;
-GtkWidget *cleeeng;
+GtkSpinButton *cleeeng;
 GtkLabel *infoeng;
 GtkWidget *info;
 GtkWidget *insertButton;

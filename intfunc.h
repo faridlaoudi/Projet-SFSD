@@ -3,6 +3,10 @@
 #include"functions.h"
 #include <dirent.h>
 const gchar *text1 = " ";
+const gchar *infoeng1 = " ";
+int nbg;
+Enreg E;
+E.sup=0;
 //main screen
 
 void on_search_clicked(GtkButton *button, gpointer user_data) {
@@ -92,10 +96,10 @@ void on_cancel_clicked(GtkButton *button, gpointer user_data){
 
 void on_check_toggled(GtkWidget *w) {
     int j=0;
- printf("%s\n", "on.SampleGtkCheckButton.toggled.h");
- j=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w));
- printf("\tchecked = %d\n", j);
- 
+    printf("%s\n", "on.SampleGtkCheckButton.toggled.h");
+    j=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w));
+    printf("\tchecked = %d\n", j);
+    
  }
 void on_entry1_changed(GtkWidget *w) {
     text1 =gtk_entry_get_text(GTK_ENTRY(w));
@@ -107,9 +111,14 @@ void on_insert_clicked(GtkButton *button, gpointer user_data) {
     gtk_widget_show_all(dialoginsert);
     gint response = gtk_dialog_run(GTK_DIALOG(dialoginsert));
 }
+void on_cleeeng_value_changed(GtkWidget *w) {
+ printf("%s\n", "on.SampleGtkSpinButton.value.changed.h");
+ printf("spin = %d\n", (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w)));
+ nbg = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w));
+ }
 void on_info_changed(GtkWidget *w) {
- printf("%s\n", "Info :");
- printf("\t%s\n", gtk_entry_get_text(GTK_ENTRY(w)));
+    infoeng1 = gtk_entry_get_text(GTK_ENTRY(w));
+    printf("%s %s\n", "Info :",infoeng1);
  }
 void on_cancelinsert_clicked(GtkButton *button, gpointer user_data){
     g_print("cancel\n");  // Debug print
@@ -120,11 +129,11 @@ void on_okinsert_clicked(GtkButton *button, gpointer user_data){
     g_print("ok\n");  // Debug print
     gtk_widget_show_all(screen);
     gtk_widget_hide(dialoginsert);
+    E.cle = nbg;
+    strcpy(E.info, infoeng1);
+    insertion_TOVC(filepointer, E);
 }
-void on_cleeeng_value_changed(GtkWidget *w) {
- printf("%s\n", "key is :");
- printf("spin = %d\n", (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w)));
- }
+
 
 
 #endif

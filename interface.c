@@ -23,10 +23,9 @@ int main(int argc, char *argv[]) {
     cancel = GTK_WIDGET(gtk_builder_get_object(builder, "cancel"));
     ok = GTK_WIDGET(gtk_builder_get_object(builder, "ok"));
     entry1 = GTK_WIDGET(gtk_builder_get_object(builder, "entry1"));
-    cleeeng = GTK_WIDGET(gtk_builder_get_object(builder, "cleeng"));
+    cleeeng = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "cleeeng"));
     info = GTK_WIDGET(gtk_builder_get_object(builder, "info"));
     lb = GTK_LABEL(gtk_builder_get_object(builder, "lb"));
-   
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(screen, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     
