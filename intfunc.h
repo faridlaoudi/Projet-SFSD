@@ -79,7 +79,7 @@ void on_view_clicked(GtkButton *button, gpointer user_data){
         g_print("ok\n");  // Debug print
         gtk_widget_show_all(screen);
         gtk_widget_hide(dialog);
-        TOVC *filepointer = ouvrir(text1,'A');
+        TOVC *filepointer = ouvrir(text1,'N');
         gtk_label_set_text (GTK_LABEL(files), "");
         gtk_label_set_text (GTK_LABEL(files1), text1);
     }
