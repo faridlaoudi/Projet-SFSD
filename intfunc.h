@@ -6,13 +6,8 @@ const gchar *text1 = " ";
 const gchar *infoeng1 = " ";
 int nbg;
 Enreg E;
-E.sup=0;
-//main screen
 
-void on_search_clicked(GtkButton *button, gpointer user_data) {
-    g_print("Button clicked\n");
-    gtk_label_set_text (GTK_LABEL(files1), "hi");
-}
+//main screen
 void on_button1_clicked(GtkButton *button, gpointer user_data){
     g_print("Button clicked\n");  // Debug print
     gtk_widget_show_all(screen);
@@ -84,7 +79,7 @@ void on_view_clicked(GtkButton *button, gpointer user_data){
         g_print("ok\n");  // Debug print
         gtk_widget_show_all(screen);
         gtk_widget_hide(dialog);
-        TOVC *filepointer = ouvrir(text1,'N');
+        TOVC *filepointer = ouvrir(text1,'A');
         gtk_label_set_text (GTK_LABEL(files), "");
         gtk_label_set_text (GTK_LABEL(files1), text1);
     }
@@ -131,9 +126,50 @@ void on_okinsert_clicked(GtkButton *button, gpointer user_data){
     gtk_widget_hide(dialoginsert);
     E.cle = nbg;
     strcpy(E.info, infoeng1);
+    TOVC *filepointer = ouvrir(text1,'A');
     insertion_TOVC(filepointer, E);
 }
 
+//delete button
+void on_delete_clicked(GtkButton *button, gpointer user_data) {
+    g_print("ok\n");
+    gtk_widget_show_all(dialogdelete);
+    gint response = gtk_dialog_run(GTK_DIALOG(dialogdelete));
+}
+void on_spinbut_value_changed(GtkWidget *w) {
+ printf("key = %d\n", (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w)));
+ }
 
+void on_cancelbut_clicked(GtkButton *button, gpointer user_data){
+    g_print("cancel\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogdelete);
+}
+void on_okbut_clicked(GtkButton *button, gpointer user_data){
+    g_print("ok\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogdelete);
+}
+
+//search button
+void on_search_clicked(GtkButton *button, gpointer user_data) {
+    g_print("ok\n");
+    gtk_widget_show_all(dialogsearch);
+    gint response = gtk_dialog_run(GTK_DIALOG(dialogsearch));
+}
+void on_searchspin_value_changed(GtkWidget *w) {
+ printf("key = %d\n", (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w)));
+ }
+
+void on_cancelsearch_clicked(GtkButton *button, gpointer user_data){
+    g_print("cancel\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogsearch);
+}
+void on_oksearch_clicked(GtkButton *button, gpointer user_data){
+    g_print("ok\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogsearch);
+}
 
 #endif

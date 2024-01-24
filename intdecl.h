@@ -37,5 +37,18 @@ GtkLabel *lb;
 GtkLabel *files;
 GtkWidget *files1;
 GtkWidget *affichage;
+GtkWidget *okbut;
+GtkWidget *deletelb;
+GtkWidget *spinbut;
+GtkWidget *cancelbut;
+GtkWidget *dialogdelete;
+GtkWidget *dialogdelete1;
+GtkWidget *oksearch;
+GtkWidget *searchlb;
+GtkWidget *searchspin;
+GtkWidget *cancelsearch;
+GtkWidget *dialogsearch;
+GtkWidget *dialogsearch1;
+
 
 #endif

@@ -26,12 +26,6 @@ int main(int argc, char *argv[]) {
     cleeeng = GTK_SPIN_BUTTON(gtk_builder_get_object(builder, "cleeeng"));
     info = GTK_WIDGET(gtk_builder_get_object(builder, "info"));
     lb = GTK_LABEL(gtk_builder_get_object(builder, "lb"));
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(screen, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-    
-    
-    gtk_builder_connect_signals(builder, NULL);
-
     fixed1 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed1"));
     fixed2 = GTK_WIDGET(gtk_builder_get_object(builder, "fixed2"));
     button1 = GTK_BUTTON(gtk_builder_get_object(builder, "button1"));
@@ -48,8 +42,25 @@ int main(int argc, char *argv[]) {
     title = GTK_LABEL(gtk_builder_get_object(builder, "title"));
     files = GTK_LABEL(gtk_builder_get_object(builder, "files"));
     files1 = GTK_WIDGET(gtk_builder_get_object(builder, "files1"));
+    okbut = GTK_WIDGET(gtk_builder_get_object(builder, "okbut"));
+    cancelbut = GTK_WIDGET(gtk_builder_get_object(builder, "cancelbut"));
+    deletelb = GTK_WIDGET(gtk_builder_get_object(builder, "deletelb"));
+    spinbut = GTK_WIDGET(gtk_builder_get_object(builder, "spinbut"));
+    dialogdelete = GTK_WIDGET(gtk_builder_get_object(builder, "dialogdelete"));
+    dialogdelete1 = GTK_WIDGET(gtk_builder_get_object(builder, "dialogdelete1"));
+    oksearch = GTK_WIDGET(gtk_builder_get_object(builder, "oksearch"));
+    cancelsearch = GTK_WIDGET(gtk_builder_get_object(builder, "cancelsearch"));
+    searchlb = GTK_WIDGET(gtk_builder_get_object(builder, "searchlb"));
+    searchspin = GTK_WIDGET(gtk_builder_get_object(builder, "searchspin"));
+    dialogsearch = GTK_WIDGET(gtk_builder_get_object(builder, "dialogsearch"));
+    dialogsearch1 = GTK_WIDGET(gtk_builder_get_object(builder, "dialogsearch1"));
+
+
     g_signal_connect(button1, "clicked", G_CALLBACK(on_button1_clicked), NULL);
     g_signal_connect(search, "clicked", G_CALLBACK(on_search_clicked), NULL);
+    gtk_builder_connect_signals(builder, NULL);
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    g_signal_connect(screen, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     
     gtk_widget_show_all(window);
     gtk_main();
