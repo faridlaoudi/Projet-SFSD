@@ -367,9 +367,7 @@ void Suppression_phisique_TOVC(TOVC *pF, int cle) {
     semi_enreg SE;
     int stop = 0;
     Buffer Buf;
-
     Recherche_TOVC(pF, cle, &i, &j, &trouv);
-
     if (trouv) {
         i1 = i;
         j1 = j;
@@ -379,14 +377,11 @@ void Suppression_phisique_TOVC(TOVC *pF, int cle) {
             recupsemi_enreg(pF, SE, &i1, &j1);
             sub_string(SE, 0, Taille_Bloc - j, inter1);
             sub_string(SE, strlen(inter1), strlen(SE), inter2);
-
             liredir(pF, i, &Buf);
             Buf.chaine[j] = '\0';
             sprintf(Buf.chaine, "%s%s", Buf.chaine, inter1);
             j += strlen(inter1);
-
             ecriredir(pF, i, Buf);
-
             if (strlen(inter2) != 0) {
                 i = i1;
                 j = 0;  // Reset j to 0 as we move to the next block
