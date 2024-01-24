@@ -5,13 +5,13 @@
 #define Max_enreg 20
 #define b 3
 
-
+//Vérifie si un fichier a une certaine extension
 int hasExtension(const char *fileName, const char *extension) {
     const char *dot = strrchr(fileName, '.');
     if (!dot || dot == fileName) return 0;
     return strcmp(dot, extension) == 0;
 }
-
+//Affiche la liste des fichiers avec une extension spécifique dans un répertoire donné.
 void listFiles(const char *path, const char *extension) {
     struct dirent *entry;
     DIR *dir = opendir(path);
@@ -30,15 +30,16 @@ void listFiles(const char *path, const char *extension) {
 
     closedir(dir);
 }
+//Structure représentant un bloc de données, avec un tableau de caractères
 typedef struct Tbloc
 {
 	char chaine[Taille_Bloc+1];
 }	Tbloc ;
-
+// buffer de type tbloc
 typedef struct Tbloc Buffer;
-
+//un tableau de caractères représentant un enregistrement partiel
 typedef char semi_enreg[Taille_Bloc+1];
-
+//Structure représentant un enregistrement complet avec une clé (cle), une indication de suppression logique (sup), et des informations (info).
 typedef struct Enreg
 {
     // taille de la longueur = 3
@@ -46,7 +47,7 @@ typedef struct Enreg
     int sup; // bool�en
     char info[Taille_Bloc-6];
 }   Enreg;
-
+//Structure représentant l'en-tête du fichier avec des informations telles que l'adresse du dernier bloc, le nombre d'enregistrements, l'indice libre et le nombre d'enregistrements supprimés.
 typedef struct Entete
 {
     int adr_dernier_bloc; //numero d'ordre
@@ -60,12 +61,13 @@ typedef struct TOVC
     FILE *F;
     Entete entete;
 }	TOVC;
-
-TOVC *ouvrir(char *filename,char mod) // pour main c mod = 'A' ancien (r+) || mod = 'N' nouveau (w+)
+// ouverture de fichier sans dependance de GTK
+TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nouveau (wb+)
 {
     TOVC *I = malloc(sizeof(TOVC));
     char s[3];
-    sprintf(s,"w+");
+    if ((mod == 'A') || (mod =='a')) sprintf(s,"rb+");
+    else sprintf(s,"wb+");
     I->F=fopen(filename,s);
     if ((mod == 'A') || (mod =='a'))
     {
@@ -81,7 +83,7 @@ TOVC *ouvrir(char *filename,char mod) // pour main c mod = 'A' ancien (r+) || mo
     }
     return I;
 }
-
+// fermer un fichier TOVC en sauvegardant les informations d'en-tête dans le fichier et en fermant le pointeur de fichier associé
 void fermer(TOVC * pF)
 {
 
@@ -90,7 +92,7 @@ void fermer(TOVC * pF)
     fclose(pF->F);
 
 }
-
+//une fonction d'accès aux différentes informations d'en-tête stockées
 int entete(TOVC *pF,int i)
 {
     if (i==1) return ((pF->entete).adr_dernier_bloc);
@@ -192,8 +194,11 @@ void SemitoEnreg(semi_enreg SE,Enreg *E)
     E->sup=atoi(inter);
     sub_string(SE,7,strlen(SE)-7,E->info);
 }
-
-void recupsemi_enreg(TOVC *pF,semi_enreg SE,int *i,int *j) //a modifier ! comme hidouci
+/*La fonction construit le semi-enregistrement en ajoutant la taille convertie en une chaîne de caractères.
+Elle extrait ensuite une sous-chaîne de taille+4 caractères (inter) à partir de l'indice *j.
+Si la longueur de la sous-chaîne est égale à la taille+4, elle est ajoutée au semi-enregistrement, et *j est incrémenté de taille+4.
+Sinon, la lecture continue sur le bloc suivant, et la partie manquante est lue à partir de l'indice 0 du nouveau bloc*/
+void recupsemi_enreg(TOVC *pF,semi_enreg SE,int *i,int *j) 
 {
     int taille;
     char inter[Taille_Bloc+1],inter2[Taille_Bloc+1];
@@ -234,7 +239,7 @@ void recupsemi_enreg(TOVC *pF,semi_enreg SE,int *i,int *j) //a modifier ! comme 
     }
 }
 
-
+//La fonction vise à afficher une représentation détaillée des enregistrements stockés dans le fichier, y compris leur clé, leur statut de suppression et des informations supplémentaires. Elle gère les cas où un enregistrement s'étend sur plusieurs blocs
 void affich_TOVC(TOVC * pF)
 {
     int i=1,i1=1,j=0,j1=0;
@@ -255,7 +260,7 @@ void affich_TOVC(TOVC * pF)
 }
 
 
-
+//La fonction a pour objectif de déterminer la position d'un enregistrement avec une clé spécifique dans le fichier. Si l'enregistrement est trouvé, les variables i et j sont mises à jour pour indiquer la position de l'enregistrement dans le fichier, et la variable trouv est définie à 1.
 void Recherche_TOVC(TOVC *pF,int cle,int *i,int *j,int *trouv)
 {
     (*trouv)=0;
@@ -276,7 +281,7 @@ void Recherche_TOVC(TOVC *pF,int cle,int *i,int *j,int *trouv)
     }
     if ((entete(pF,1)>0) && ((!E.sup) && (E.cle==cle))) (*trouv)=1;
 }
-
+//Cette fonction semble être conçue pour insérer un semi-enregistrement dans un fichier tout en gérant les cas où l'insertion chevauche plusieurs blocs. La récursivité est utilisée pour gérer les parties du semi-enregistrement qui débordent dans des blocs suivants. La fonction prend en compte la mise à jour de l'entête du dernier bloc si l'insertion se fait dans le dernier bloc existant
 void insertion_pos_rec(TOVC *pF,int *i,int *j,semi_enreg SE)
 {
 
@@ -312,7 +317,7 @@ void insertion_pos_rec(TOVC *pF,int *i,int *j,semi_enreg SE)
         ecriredir(pF,(*i),buf);
     }
 }
-
+//Cette fonction sert à insérer un nouvel enregistrement dans le fichier géré par TOVC. Elle utilise la recherche pour déterminer où insérer le nouvel enregistrement en fonction de sa clé. Si l'enregistrement avec la même clé existe déjà, l'insertion est évitée
 void insertion_TOVC(TOVC *pF,Enreg E)
 {
     int i,j,trouv;
@@ -326,9 +331,12 @@ void insertion_TOVC(TOVC *pF,Enreg E)
         insertion_pos_rec(pF,&i,&j,SE);
         aff_entete(pF,2,entete(pF,2)+1);
     }
+
+
 }
 
 
+//Cette fonction sert à marquer un enregistrement comme supprimé dans un fichier géré par TOVC. Elle utilise la recherche pour localiser l'enregistrement avec la clé spécifiée, puis met à jour le marqueur de suppression et les statistiques d'entête.
 void suppression_TOVC(TOVC *pF,int cle)
 {
     int i,j,trouv;
