@@ -113,7 +113,6 @@ void on_cleeeng_value_changed(GtkWidget *w) {
  }
 void on_info_changed(GtkWidget *w) {
     infoeng1 = gtk_entry_get_text(GTK_ENTRY(w));
-    printf("%s %s\n", "Info :",infoeng1);
  }
 void on_cancelinsert_clicked(GtkButton *button, gpointer user_data){
     g_print("cancel\n");  // Debug print

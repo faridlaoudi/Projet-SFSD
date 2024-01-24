@@ -65,9 +65,11 @@ typedef struct TOVC
 TOVC *ouvrir(char *filename,char mod) // mod = 'A' ancien (rb+) || mod = 'N' nouveau (wb+)
 {
     TOVC *I = malloc(sizeof(TOVC));
-    char s[3];
-    if ((mod == 'A') || (mod =='a')) sprintf(s,"rb+");
-    else sprintf(s,"wb+");
+    char s[4];
+    if ((mod == 'A') || (mod =='a')) sprintf(s,"r+");
+    else {
+            sprintf(s,"w+");
+         }
     I->F=fopen(filename,s);
     if ((mod == 'A') || (mod =='a'))
     {
