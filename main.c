@@ -135,7 +135,6 @@ int main()
         }while (choice2 !=0 && choice2 !=6);
     }while(choice1 != 0 && choice2 !=0 );
 
-    //i will add function to free the storage
     //need to fix the delete function
 
     return 0;

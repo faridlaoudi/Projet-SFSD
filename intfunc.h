@@ -1,6 +1,6 @@
 #ifndef INTFUNC_H
 #define INTFUNC_H
-#include"functions.h"
+#include"functionsgtk.h"
 #include <dirent.h>
 const gchar *text1 = " ";
 const gchar *infoeng1 = " ";
@@ -9,7 +9,7 @@ Enreg E;
 
 //main screen
 void on_button1_clicked(GtkButton *button, gpointer user_data){
-    g_print("Button clicked\n");  // Debug print
+    g_print("starting\n");  // Debug print
     gtk_widget_show_all(screen);
     gtk_widget_hide(window);
     char *text = g_strdup(" ");

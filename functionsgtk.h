@@ -1,5 +1,5 @@
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#ifndef FUNCTIONSGTK_H
+#define FUNCTIONSGTK_H
 
 #define Taille_Bloc 30
 #define Max_enreg 20
@@ -61,11 +61,12 @@ typedef struct TOVC
     Entete entete;
 }	TOVC;
 
-TOVC *ouvrir(char *filename,char mod) // pour main c mod = 'A' ancien (r+) || mod = 'N' nouveau (w+)
+TOVC *ouvrir(const gchar* filename,char mod) // pour gtk
 {
     TOVC *I = malloc(sizeof(TOVC));
     char s[3];
-    sprintf(s,"w+");
+    if ((mod == 'A') || (mod =='a')) sprintf(s,"r+");
+    else sprintf(s,"w+");
     I->F=fopen(filename,s);
     if ((mod == 'A') || (mod =='a'))
     {
