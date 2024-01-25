@@ -217,6 +217,93 @@ of the new Record</property>
       </object>
     </child>
   </object>
+  <object class="GtkDialog" id="dialogsearch">
+    <property name="can-focus">False</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialogsearch1">
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="cancelsearch">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="on_cancelsearch_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="oksearch">
+                <property name="label" translatable="yes">OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <signal name="clicked" handler="on_oksearch_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="searchlb">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">7</property>
+            <property name="label" translatable="yes">Enter the key 
+of the record </property>
+            <attributes>
+              <attribute name="font-desc" value="Sans Bold 10"/>
+              <attribute name="style" value="normal"/>
+              <attribute name="weight" value="semibold"/>
+              <attribute name="scale" value="1.3"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="searchspin">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="halign">center</property>
+            <property name="margin-bottom">14</property>
+            <property name="text" translatable="yes">0</property>
+            <property name="adjustment">adjustment1</property>
+            <signal name="value-changed" handler="on_searchspin_value_changed" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkDialog" id="dialog">
     <property name="can-focus">False</property>
     <property name="type-hint">dialog</property>
@@ -313,93 +400,6 @@ of the new Record</property>
         </child>
         <child>
           <placeholder/>
-        </child>
-      </object>
-    </child>
-  </object>
-  <object class="GtkDialog" id="dialogsearch">
-    <property name="can-focus">False</property>
-    <property name="type-hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialogsearch1">
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
-            <property name="can-focus">False</property>
-            <property name="layout-style">end</property>
-            <child>
-              <object class="GtkButton" id="cancelsearch">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <signal name="clicked" handler="on_cancelsearch_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="oksearch">
-                <property name="label" translatable="yes">OK</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <signal name="clicked" handler="on_oksearch_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="searchlb">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-top">12</property>
-            <property name="margin-bottom">7</property>
-            <property name="label" translatable="yes">Enter the key 
-of the record </property>
-            <attributes>
-              <attribute name="font-desc" value="Sans Bold 10"/>
-              <attribute name="style" value="normal"/>
-              <attribute name="weight" value="semibold"/>
-              <attribute name="scale" value="1.3"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="searchspin">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">center</property>
-            <property name="margin-bottom">14</property>
-            <property name="text" translatable="yes">0</property>
-            <property name="adjustment">adjustment1</property>
-            <signal name="value-changed" handler="on_searchspin_value_changed" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>
@@ -612,7 +612,7 @@ Computer science engineering
             <property name="height-request">153</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="pixbuf">../../Downloads/DALL_E_2024-01-12_18.04.26_-_A_logo_symbolizing_data_and_file_visualization_in_the_C_programming_language._The_design_should_be_very_clean_and_simple__incorporating_elements_like_-removebg-preview.png</property>
+            <property name="pixbuf">interface.png</property>
           </object>
           <packing>
             <property name="x">137</property>

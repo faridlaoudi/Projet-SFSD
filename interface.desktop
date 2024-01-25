@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=interface
+Icon=/usr/share/icons/hicolor/128x128/apps/interface.png
+Exec=/home/farid/projet/Projet-SFSD-1/interface
+Comment=Your application description
+Categories=Utility;
+Terminal=false

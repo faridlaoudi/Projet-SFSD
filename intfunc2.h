@@ -1,0 +1,172 @@
+#ifndef INTFUNC2_H
+#define INTFUNC2_H
+#include"functionsgtk.h"
+#include <dirent.h>
+const gchar *text1 = "text.txt";
+const gchar *infoeng1 = " ";
+int nbg;
+Enreg E;
+TOVC *filepointer = ouvrir(text1,'N');
+
+//main screen
+void on_button1_clicked(GtkButton *button, gpointer user_data){
+    g_print("starting\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(window);
+    char *text = g_strdup(" ");
+    gchar *old_text;
+    int i=1;
+    struct dirent *entry;
+    DIR *dir = opendir(".");
+
+    if (dir == NULL) {
+        perror("Error opening directory");
+        return;
+    }
+
+    printf("avialable files :\n");
+    while ((entry = readdir(dir)) != NULL) {
+        if (hasExtension(entry->d_name, ".txt")) {
+            char index[10];
+            sprintf(index, "%d- ", i); // Convert integer to string
+            old_text = text;
+            text = g_strconcat(text, index, entry->d_name, "\n", NULL);
+            g_free(old_text);
+            i++;
+        }
+    }
+    gtk_label_set_text (GTK_LABEL(files1), text);
+    closedir(dir);
+    
+}
+void on_create_clicked(GtkButton *button, gpointer user_data) {
+    gtk_widget_show_all(dialog);
+    gint response = gtk_dialog_run(GTK_DIALOG(dialog));
+}
+
+//view Data
+
+void on_view_clicked(GtkButton *button, gpointer user_data){
+        g_print("view\n");  // Debug print
+        char *text2 = g_strdup(" ");  // Allocate memory
+        gchar *old_text2;
+        char *text3 = g_strdup(" ");
+        char *text4 = g_strdup(" ");
+        int k=1,i1=1,l=0,j1=0;
+        Enreg E;
+        semi_enreg SE;
+        sprintf(text2, "ENTETE : %d   %d   %d   %d\n",entete(filepointer,1),entete(filepointer,2),entete(filepointer,3),entete(filepointer,4));
+        while (k<=entete(filepointer,1))
+        {
+            recupsemi_enreg(filepointer,SE,&i1,&j1);
+            SemitoEnreg(SE,&E);
+            sprintf(text3,"%d|%d|%s",E.cle,E.sup,E.info);
+            if (k==i1) {sprintf(text4," Dans le Bloc %d\n",k);}
+            else {sprintf(text4," commence du bloc %d et chevauche le bloc %d\n",k,i1);}
+            if (j1==Taille_Bloc) {i1++;j1=0;}
+            k=i1;l=j1;
+            if ((k==entete(filepointer,1)) && l==entete(filepointer,3)) {break;}
+            old_text2 = text2;
+            text2 = g_strconcat(text2, text3, text4, NULL);
+            g_free(old_text2);
+        }
+        gtk_label_set_text (GTK_LABEL(affichage), text2);
+    }
+
+ //create and open files
+
+ void on_ok_clicked(GtkButton *button, gpointer user_data){
+        g_print("ok\n");  // Debug print
+        gtk_widget_show_all(screen);
+        gtk_widget_hide(dialog);
+        gtk_label_set_text (GTK_LABEL(files), "");
+        gtk_label_set_text (GTK_LABEL(files1), text1);
+    }
+void on_cancel_clicked(GtkButton *button, gpointer user_data){
+    g_print("cancel\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialog);
+}
+
+void on_check_toggled(GtkWidget *w) {
+    int j=0;
+    printf("%s\n", "on.SampleGtkCheckButton.toggled.h");
+    j=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w));
+    printf("\tchecked = %d\n", j);
+    
+ }
+void on_entry1_changed(GtkWidget *w) {
+    text1 =gtk_entry_get_text(GTK_ENTRY(w));
+ }
+
+
+//insertion button
+void on_insert_clicked(GtkButton *button, gpointer user_data) {
+    gtk_widget_show_all(dialoginsert);
+    gint response = gtk_dialog_run(GTK_DIALOG(dialoginsert));
+}
+void on_cleeeng_value_changed(GtkWidget *w) {
+ printf("%s\n", "on.SampleGtkSpinButton.value.changed.h");
+ printf("spin = %d\n", (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w)));
+ nbg = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w));
+ }
+void on_info_changed(GtkWidget *w) {
+    infoeng1 = gtk_entry_get_text(GTK_ENTRY(w));
+ }
+void on_cancelinsert_clicked(GtkButton *button, gpointer user_data){
+    g_print("cancel\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialoginsert);
+}
+void on_okinsert_clicked(GtkButton *button, gpointer user_data){
+    g_print("ok\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialoginsert);
+    E.cle = nbg;
+    strcpy(E.info, infoeng1);
+    insertion_TOVC(filepointer, E);
+}
+
+//delete button
+void on_delete_clicked(GtkButton *button, gpointer user_data) {
+    g_print("ok\n");
+    gtk_widget_show_all(dialogdelete);
+    gint response = gtk_dialog_run(GTK_DIALOG(dialogdelete));
+}
+void on_spinbut_value_changed(GtkWidget *w) {
+ printf("key = %d\n", (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w)));
+ }
+
+void on_cancelbut_clicked(GtkButton *button, gpointer user_data){
+    g_print("cancel\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogdelete);
+}
+void on_okbut_clicked(GtkButton *button, gpointer user_data){
+    g_print("ok\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogdelete);
+}
+
+//search button
+void on_search_clicked(GtkButton *button, gpointer user_data) {
+    g_print("ok\n");
+    gtk_widget_show_all(dialogsearch);
+    gint response = gtk_dialog_run(GTK_DIALOG(dialogsearch));
+}
+void on_searchspin_value_changed(GtkWidget *w) {
+ printf("key = %d\n", (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(w)));
+ }
+
+void on_cancelsearch_clicked(GtkButton *button, gpointer user_data){
+    g_print("cancel\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogsearch);
+}
+void on_oksearch_clicked(GtkButton *button, gpointer user_data){
+    g_print("ok\n");  // Debug print
+    gtk_widget_show_all(screen);
+    gtk_widget_hide(dialogsearch);
+}
+
+#endif
